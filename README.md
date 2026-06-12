@@ -118,6 +118,42 @@ Ask your AI assistant to add a field, change routing logic, or build a chatbot s
 
 ---
 
+## FAQ
+
+**Q: Does HXFE save submissions to the database?**
+No. HXFE sends email only. Use Webhook support to send data to Google Sheets, a CRM, or any external service.
+
+**Q: What is htmx and why does HXFE use it?**
+[htmx](https://htmx.org/) is a lightweight JS library that adds AJAX behavior via HTML attributes — no build step, no npm, no React. HXFE uses it for the input → confirm → complete flow without page reloads. It fits naturally with WordPress's server-rendered PHP.
+
+**Q: Can I use HXFE with AI coding tools?**
+Yes — this is one of HXFE's strengths. Forms defined as PHP arrays can be read and edited directly by AI tools. HXFE ships with `llms.txt` and `ai-reference.md` for AI agents to reference. Ask Claude or Copilot to "add a phone number field" and get back a diff-ready code change.
+
+**Q: Is HXFE GDPR compliant?**
+Yes. Zero cookies. Form state is preserved via hidden JSON fields server-side, not browser storage.
+
+**Q: Can I skip the confirmation screen?**
+Yes. Add `'confirm' => false` to your schema.
+
+**Q: Can I restrict a form to specific IP addresses or require a password?**
+Yes. Use `allowed_ips` for IP restriction and `auth` for password protection. Both support `wp-config.php` constants to keep sensitive values out of Git.
+
+---
+
+## Security
+
+- Nonce verification on all AJAX endpoints
+- All input sanitized, all output escaped
+- `hash_equals()` for password comparison (timing-attack safe)
+- `REMOTE_ADDR`-only IP matching (proxy header spoofing prevented)
+- reCAPTCHA fields fail closed in production if misconfigured
+- Uploaded files deleted immediately after email delivery
+- Passed WordPress.org manual security review
+
+Found a vulnerability? Please report it via [GitHub Issues](https://github.com/okuboyouhei/hxfe-code-first-forms/issues) or email directly.
+
+---
+
 ## Installation
 
 1. Install from [WordPress.org](https://wordpress.org/plugins/hxfe-code-first-forms/)

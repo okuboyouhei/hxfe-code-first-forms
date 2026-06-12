@@ -1,6 +1,6 @@
 === HXFE — Code-First Forms ===
 Contributors: youheiokubo
-Tags: contact form, form builder, htmx, chatbot, step form
+Tags: contact form, form builder, htmx, chatbot, ajax
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
@@ -50,6 +50,7 @@ This means your forms live in your codebase — version-controlled with Git, aut
 * Clean default styles: CSS custom properties (design tokens) for easy theme integration, responsive at 768px
 * Schema examples panel in admin: 11 copy-paste samples to get started fast
 * AI-friendly: ships with `llms.txt` and `ai-reference.md` for agentic coding tools
+* Source code: available on [GitHub](https://github.com/okuboyouhei/hxfe-code-first-forms)
 
 = Minimum example =
 

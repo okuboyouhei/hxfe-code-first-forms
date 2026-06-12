@@ -247,9 +247,10 @@ function hxfe_add_cors_headers() {
 	$allowed = hxfe_get_allowed_origins();
 
 	// ワイルドカード指定がある場合は全許可
+	// 注意: ワイルドカード + credentials:true は CSRF 的に危険なため、
+	// 全オリジン許可時は Allow-Credentials を付けない（HXFEはnonceをPOST本文で送るためCookie不要）。
 	if ( in_array( '*', $allowed, true ) ) {
 		header( 'Access-Control-Allow-Origin: ' . esc_url_raw( $origin ) );
-		header( 'Access-Control-Allow-Credentials: true' );
 		header( 'Access-Control-Allow-Methods: POST, GET, OPTIONS' );
 		header( 'Access-Control-Allow-Headers: Content-Type, X-Requested-With' );
 		return;

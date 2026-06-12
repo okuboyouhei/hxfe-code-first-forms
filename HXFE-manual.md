@@ -660,6 +660,9 @@ $schemas['survey'] = [
 1. [Google reCAPTCHA](https://www.google.com/recaptcha/admin) でサイトを登録
 2. WordPress管理画面 → **設定 → Form Engine → reCAPTCHA** でキーを入力
 
+> **シークレットキー未設定時の挙動（v1.3.8〜）**
+> `recaptcha` フィールドを置いたのにシークレットキーが未設定の場合、本番環境（WP_DEBUG無効）では送信が**ブロック**されます（未検証のまま素通りさせない安全側の挙動）。開発環境（WP_DEBUG有効）では検証をスキップします。キー未設定のままだと送信が常に失敗するので、必ず設定してください（スキーマlintでも警告されます）。
+
 ### v3（非表示タイプ・推奨）
 
 ユーザーには何も表示されず、バックグラウンドでスコア判定します。
@@ -1396,6 +1399,14 @@ add_filter( 'hxfe_validate_form', function( $errors, $values, $schema ) {
 'ip_blocked_html' => '<p>このフォームはご利用いただけません。</p>',
 ```
 
+> **プロキシ背後で使う場合（v1.3.8〜）**
+> IP判定はデフォルトで `REMOTE_ADDR`（接続元IP）のみを見ます。`X-Forwarded-For` などのヘッダはクライアントが偽装できるため無視します。
+> Cloudflareやロードバランサーなどのプロキシ背後で運用していて、`allowed_ips` を正しく機能させたい場合は、`wp-config.php` に次の1行を追加してください。
+> ```php
+> define( 'HXFE_TRUST_PROXY', true );
+> ```
+> 信頼するヘッダを絞り込みたい場合は `hxfe_trusted_proxy_headers` フィルターで `$_SERVER` のキー名の配列を返します（空配列なら `REMOTE_ADDR` のみ）。
+
 ### ブルートフォース対策（v1.3.2）
 
 パスワード認証で5回連続失敗すると15分間ロックアウトされます。
@@ -1847,4 +1858,4 @@ HXFEの「フォームはコードで管理する」設計と組み合わせる�
 
 ---
 
-*このファイル（HXFE-マニュアル.md）はプラグインのZIPに同梱されています。*
+*このファイル（HXFE-manual.md）はプラグインのZIPに同梱されています。*

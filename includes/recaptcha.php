@@ -172,8 +172,16 @@ function hxfe_validate_recaptcha( array $field, string $token ) {
 	$cfg = hxfe_recaptcha_config( $field );
 
 	if ( '' === $cfg['secret_key'] ) {
-		// シークレットキー未設定: 検証をスキップ（開発環境用）
-		return [ 'value' => 'skipped', 'error' => '' ];
+		// シークレットキー未設定。
+		// 開発環境（WP_DEBUG有効）では検証をスキップして開発を妨げない。
+		// 本番環境では fail-closed にして「保護しているつもりで素通し」を防ぐ。
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			return [ 'value' => 'skipped', 'error' => '' ];
+		}
+		return [
+			'value' => '',
+			'error' => __( 'Spam protection is not configured. Please contact the site administrator.', 'hxfe-code-first-forms' ),
+		];
 	}
 
 	if ( '' === $token ) {

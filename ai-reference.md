@@ -67,6 +67,8 @@ add_filter( 'hxfe_schemas', function( $schemas ) {
 | `recaptcha` | Google reCAPTCHA | `version` ('v2'/'v3'), `threshold` |
 | `privacy` | Privacy policy checkbox | `policy_url`, `policy_label` |
 
+**reCAPTCHA note (v1.3.8+):** A `recaptcha` field requires a secret key (set in Settings → HXFE, or via the field's `secret_key`). If the secret key is missing, submissions **fail closed** in production (WP_DEBUG off) — they are blocked rather than passed through unverified. With WP_DEBUG on, validation is skipped for local development. The schema linter warns when a `recaptcha` field has no secret key configured.
+
 ---
 
 ## Schema keys — complete reference
@@ -423,6 +425,8 @@ $schemas['internal'] = [
 | `ip_blocked_html` | `string` | HTML shown to blocked visitors. Defaults to generic message. |
 
 Supports IPv4 and IPv6. CIDR notation (e.g. `192.168.1.0/24`) is supported.
+
+**Proxy note (v1.3.8+):** By default, `allowed_ips` matches against `REMOTE_ADDR` only; forgeable proxy headers (X-Forwarded-For, CF-Connecting-IP) are ignored to prevent spoofing. If the site sits behind a trusted reverse proxy such as Cloudflare, opt in with `define( 'HXFE_TRUST_PROXY', true );` in wp-config.php, or scope it precisely with the `hxfe_trusted_proxy_headers` filter (return an array of `$_SERVER` keys; empty = REMOTE_ADDR only).
 
 ### Custom validation
 

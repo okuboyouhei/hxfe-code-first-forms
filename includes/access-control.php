@@ -94,19 +94,46 @@ function hxfe_check_access( array $schema ) {
  * ------------------------------------------------------------------------- */
 
 /**
- * Returns the client's real IP address.
- * Respects common proxy headers when present.
+ * Returns the client's real IP address for access-control decisions.
  *
- * @return string
+ * SECURITY: By default this returns REMOTE_ADDR only. Proxy headers such as
+ * X-Forwarded-For and CF-Connecting-IP are forgeable by the client, so they
+ * are IGNORED unless the site operator explicitly declares that the site sits
+ * behind a trusted reverse proxy.
+ *
+ * To trust proxy headers (e.g. when behind Cloudflare or a load balancer),
+ * add ONE of the following:
+ *
+ *   // wp-config.php — trust the default proxy header list
+ *   define( 'HXFE_TRUST_PROXY', true );
+ *
+ *   // OR a theme/plugin — trust a specific, minimal set of headers
+ *   add_filter( 'hxfe_trusted_proxy_headers', function() {
+ *       return [ 'HTTP_CF_CONNECTING_IP' ]; // Cloudflare only
+ *   } );
+ *
+ * If the filter returns an empty array, only REMOTE_ADDR is used.
+ *
+ * @return string Validated IP, or '0.0.0.0' if none could be determined.
  */
 function hxfe_get_client_ip() {
-	$headers = [
-		'HTTP_CF_CONNECTING_IP', // Cloudflare
-		'HTTP_X_FORWARDED_FOR',
-		'HTTP_X_REAL_IP',
-		'REMOTE_ADDR',
-	];
-	foreach ( $headers as $header ) {
+	// 信頼するプロキシヘッダの一覧を決定する。
+	// デフォルトは空（REMOTE_ADDRのみ）。HXFE_TRUST_PROXY=true で標準セットを許可。
+	$default_trusted = ( defined( 'HXFE_TRUST_PROXY' ) && HXFE_TRUST_PROXY )
+		? [ 'HTTP_CF_CONNECTING_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_REAL_IP' ]
+		: [];
+
+	/**
+	 * 信頼するプロキシヘッダを絞り込む／追加するフィルター。
+	 *
+	 * @param string[] $headers $_SERVER のキー名の配列。空配列なら REMOTE_ADDR のみ。
+	 */
+	$trusted = (array) apply_filters( 'hxfe_trusted_proxy_headers', $default_trusted );
+
+	foreach ( $trusted as $header ) {
+		if ( 'REMOTE_ADDR' === $header ) {
+			continue; // REMOTE_ADDR は最後に必ずフォールバックするため除外。
+		}
 		if ( ! empty( $_SERVER[ $header ] ) ) {
 			// X-Forwarded-For may contain a comma-separated list; take the first.
 			$ip = trim( explode( ',', sanitize_text_field( wp_unslash( $_SERVER[ $header ] ) ) )[0] );
@@ -115,7 +142,9 @@ function hxfe_get_client_ip() {
 			}
 		}
 	}
-	return '0.0.0.0';
+
+	// デフォルト（信頼ヘッダなし or 取得失敗）: REMOTE_ADDR を使う。偽装不可。
+	return hxfe_get_remote_addr();
 }
 
 /**
@@ -275,8 +304,9 @@ function hxfe_auth_handle_login( array $schema ) {
 			continue;
 		}
 
-		// wp_check_password はハッシュ済みパスワードと平文の両方に対応
-		if ( wp_check_password( $posted_pass, $user_pass ) || $posted_pass === $user_pass ) {
+		// wp_check_password はハッシュ済みパスワードに対応。
+		// 平文設定の場合は hash_equals() でタイミングセーフに比較する。
+		if ( wp_check_password( $posted_pass, $user_pass ) || hash_equals( (string) $user_pass, (string) $posted_pass ) ) {
 			// ログイン成功 — トークン発行
 			$token = wp_generate_password( 32, false );
 			set_transient( 'hxfe_auth_' . $schema['id'] . '_' . $token, 1, 8 * HOUR_IN_SECONDS );

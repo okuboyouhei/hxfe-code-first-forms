@@ -73,7 +73,7 @@ add_filter( 'hxfe_schemas', function( $schemas ) {
 | `includes/renderer.php` | HTML rendering (input/confirm/complete) | UI changes |
 | `includes/mailer.php` | Email sending, autoreply | Email feature changes |
 | `includes/file-upload.php` | File upload, MIME whitelist, cleanup | File feature changes |
-| `includes/access-control.php` | IP restriction, password auth | Access control changes |
+| `includes/access-control.php` | IP restriction (REMOTE_ADDR by default; proxy headers via HXFE_TRUST_PROXY / hxfe_trusted_proxy_headers), password auth | Access control changes |
 | `includes/conditions.php` | show_if / hide_if (deprecated, use show_if) / required_if logic | Conditional logic changes |
 | `includes/shortcode.php` | Shortcode registration, asset enqueue | Shortcode/asset changes |
 | `includes/settings-page.php` | WordPress admin UI | Admin UI changes |
@@ -82,7 +82,7 @@ add_filter( 'hxfe_schemas', function( $schemas ) {
 | `includes/webhook.php` | Webhook dispatch | Webhook changes |
 | `includes/smtp.php` | SMTP configuration | SMTP changes |
 | `includes/iframe.php` | iframe embedding, CORS | iframe changes |
-| `HXFE-マニュアル.md` | Japanese user manual | User-facing docs only |
+| `HXFE-manual.md` | Japanese user manual | User-facing docs only |
 
 ---
 
@@ -108,11 +108,18 @@ add_filter( 'hxfe_schemas', function( $schemas ) {
 - Zero cookies for form state — GDPR compliant by design
 - CSS custom properties (design tokens) for easy theme integration
 - Responsive out of the box (≤768px breakpoint)
-- Current version: 1.3.7
+- Current version: 1.3.8
 
 ---
 
 ## Version history (latest first)
+
+### v1.3.8
+- Security: IP access control (`allowed_ips`) uses REMOTE_ADDR only by default; forgeable proxy headers ignored unless opted in via `HXFE_TRUST_PROXY` constant or `hxfe_trusted_proxy_headers` filter
+- Security: reCAPTCHA fails closed in production when secret key is missing (was fail-open); WP_DEBUG still skips for local dev
+- Security: plain-text form password comparison now uses hash_equals()
+- Security: CORS wildcard origin no longer sends Allow-Credentials (avoids wildcard+credentials)
+- Dev: schema lint warns when a recaptcha field has no secret key
 
 ### v1.3.7
 - Security: Removed skip_sanitize parameter from hxfe_process_fields() — all values sanitized on every call

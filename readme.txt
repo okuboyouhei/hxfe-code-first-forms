@@ -4,7 +4,7 @@ Tags: contact form, form builder, htmx, chatbot, step form
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.3.7
+Stable tag: 1.3.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -205,6 +205,13 @@ reCAPTCHA is **disabled by default**. It is only active when a site administrato
 * Google Privacy Policy: https://policies.google.com/privacy
 
 == Changelog ==
+
+= 1.3.8 =
+* Security: IP access control (`allowed_ips`) now uses REMOTE_ADDR only by default, ignoring forgeable proxy headers (X-Forwarded-For, etc.). Sites behind a trusted reverse proxy (e.g. Cloudflare) can opt in with `define( 'HXFE_TRUST_PROXY', true );` in wp-config.php, or scope it precisely via the `hxfe_trusted_proxy_headers` filter. **Action required** only if you use `allowed_ips` behind a proxy.
+* Security: reCAPTCHA validation now fails closed in production when the secret key is missing (previously requests passed through unverified). Development environments with WP_DEBUG still skip validation for convenience.
+* Security: Form password comparison for plain-text passwords now uses hash_equals() to avoid timing side channels.
+* Security: CORS wildcard origin (`*`) no longer sends Access-Control-Allow-Credentials, avoiding the unsafe wildcard+credentials combination. Named origins are unaffected.
+* Dev: Schema lint now warns when a `recaptcha` field has no secret key configured.
 
 = 1.3.7 =
 * Security: Removed skip_sanitize parameter from hxfe_process_fields() — all values are now sanitized on every call, including confirm→submit flow

@@ -154,6 +154,15 @@ function hxfe_lint_schema( array $schema ) {
 		if ( 'chatbot' === $step_mode && ! in_array( $type, [ 'honeypot', 'recaptcha' ], true ) && empty( $field['bot_message'] ) ) {
 			$problems[] = "{$prefix} ({$key}): chatbot mode requires 'bot_message'";
 		}
+
+		// recaptcha フィールドはあるが secret_key が設定されていない
+		// （本番では fail-closed のため送信が常に失敗する）
+		if ( 'recaptcha' === $type && function_exists( 'hxfe_recaptcha_config' ) ) {
+			$rc_cfg = hxfe_recaptcha_config( $field );
+			if ( '' === $rc_cfg['secret_key'] ) {
+				$problems[] = "{$prefix} ({$key}): recaptcha field has no secret key (set it in Settings → HXFE, or it will block all submissions in production)";
+			}
+		}
 	}
 
 	if ( ! $has_honeypot ) {

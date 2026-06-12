@@ -4,7 +4,7 @@ Tags: contact form, form builder, htmx, chatbot, ajax
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.3.8
+Stable tag: 1.3.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -206,6 +206,11 @@ reCAPTCHA is **disabled by default**. It is only active when a site administrato
 * Google Privacy Policy: https://policies.google.com/privacy
 
 == Changelog ==
+
+= 1.3.9 =
+* Fixed: Renamed htmx script handle from 'htmx' to 'hxfe-htmx' to avoid conflicts with other plugins loading htmx
+* Fixed: Duplicate shortcode on same page now renders a safe HTML comment instead of broken duplicate IDs
+* Docs: Added schema linter warning reference to ai-reference.md and HXFE-manual.md
 
 = 1.3.8 =
 * Security: IP access control (`allowed_ips`) now uses REMOTE_ADDR only by default, ignoring forgeable proxy headers (X-Forwarded-For, etc.). Sites behind a trusted reverse proxy (e.g. Cloudflare) can opt in with `define( 'HXFE_TRUST_PROXY', true );` in wp-config.php, or scope it precisely via the `hxfe_trusted_proxy_headers` filter. **Action required** only if you use `allowed_ips` behind a proxy.

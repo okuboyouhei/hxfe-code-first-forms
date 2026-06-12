@@ -33,6 +33,14 @@ function hxfe_shortcode_handler( $atts ) {
 		return '<!-- hxfe_form: unknown form id "' . esc_html( $id ) . '" -->';
 	}
 
+	// 同一ページに同じIDのショートコードが複数置かれた場合、
+	// id="hxfe-{form_id}" が重複してHTMLとして不正になり、htmxのターゲットが壊れる。
+	static $rendered_ids = [];
+	if ( in_array( $id, $rendered_ids, true ) ) {
+		return '<!-- hxfe_form: duplicate id "' . esc_html( $id ) . '" on this page. Each form id must appear only once per page. -->';
+	}
+	$rendered_ids[] = $id;
+
 	// ページスラッグを context として付与（subject の自動付与に使用）
 	$post_slug = get_post_field( 'post_name', get_the_ID() );
 	if ( $post_slug && empty( $schema['disable_context'] ) ) {
@@ -79,7 +87,7 @@ function hxfe_enqueue_assets( array $schema = [] ) {
 	$form_id = $schema['id'] ?? '';
 
 	wp_enqueue_script(
-		'htmx',
+		'hxfe-htmx',
 		HXFE_PLUGIN_URL . 'assets/js/htmx.min.js',
 		[],
 		HXFE_HTMX_VERSION,
@@ -89,7 +97,7 @@ function hxfe_enqueue_assets( array $schema = [] ) {
 	wp_enqueue_script(
 		'hxfe-front',
 		HXFE_PLUGIN_URL . 'assets/js/hxfe-front.js',
-		[ 'htmx' ],
+		[ 'hxfe-htmx' ],
 		HXFE_VERSION,
 		true
 	);
@@ -99,7 +107,7 @@ function hxfe_enqueue_assets( array $schema = [] ) {
 		wp_enqueue_script(
 			'hxfe-chatbot',
 			HXFE_PLUGIN_URL . 'assets/js/hxfe-chatbot.js',
-			[ 'htmx' ],
+			[ 'hxfe-htmx' ],
 			HXFE_VERSION,
 			true
 		);

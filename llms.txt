@@ -108,11 +108,16 @@ add_filter( 'hxfe_schemas', function( $schemas ) {
 - Zero cookies for form state — GDPR compliant by design
 - CSS custom properties (design tokens) for easy theme integration
 - Responsive out of the box (≤768px breakpoint)
-- Current version: 1.3.8
+- Current version: 1.3.9
 
 ---
 
 ## Version history (latest first)
+
+### v1.3.9
+- Fixed: htmx script handle renamed from 'htmx' to 'hxfe-htmx' to avoid conflicts with other plugins
+- Fixed: Duplicate shortcode with same ID on same page now renders a safe HTML comment
+- Docs: Added schema linter warning reference to ai-reference.md and HXFE-manual.md
 
 ### v1.3.8
 - Security: IP access control (`allowed_ips`) uses REMOTE_ADDR only by default; forgeable proxy headers ignored unless opted in via `HXFE_TRUST_PROXY` constant or `hxfe_trusted_proxy_headers` filter

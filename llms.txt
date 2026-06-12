@@ -1,0 +1,208 @@
+# HXFE — Code-First Forms (HXFE) for WordPress
+
+> Code-first WordPress form plugin. Define forms as PHP arrays — contact forms, step forms, chatbots, surveys, and file uploads — all from one schema. Git-manageable. Zero cookies. No GUI required.
+
+---
+
+## Read this file first — always
+
+This file is the entry point for AI agents. Read this before touching any code.
+Load ai-reference.md only when the task requires it (see routing table below).
+
+---
+
+## How HXFE works in 30 seconds
+
+Forms are PHP arrays registered via a WordPress filter. No GUI. No database.
+
+```php
+add_filter( 'hxfe_schemas', function( $schemas ) {
+    $schemas['contact'] = [
+        'id'     => 'contact',
+        'to'     => 'admin@example.com',
+        'fields' => [
+            [ 'key' => 'name',  'type' => 'text',     'label' => 'Name',    'required' => true ],
+            [ 'key' => 'email', 'type' => 'email',    'label' => 'Email',   'required' => true ],
+            [ 'key' => 'body',  'type' => 'textarea', 'label' => 'Message', 'required' => true ],
+            [ 'key' => 'hp',    'type' => 'honeypot' ],
+        ],
+    ];
+    return $schemas; // always return $schemas
+});
+// Shortcode: [hxfe_form id="contact"]
+```
+
+---
+
+## Task routing — what to read for each task
+
+| Task | Read |
+|------|------|
+| Bug fix in existing PHP file | That file only. No other docs needed. |
+| Add/change a schema key or field type | ai-reference.md → relevant section only |
+| Add a new PHP feature (new file) | ai-reference.md → "How HXFE works" + relevant section |
+| Update readme.txt | ai-reference.md → Key features section only |
+| Update changelog | This file (version history below) + diff of changed files |
+| First time working on HXFE | Read this file top to bottom, then ai-reference.md if needed |
+
+**Rule: never load ai-reference.md speculatively. Only load it when the task requires schema knowledge.**
+
+---
+
+## Non-negotiable rules
+
+1. Every schema MUST have `id`, `fields`, and either `to` or `to_rules`
+2. Every schema MUST include `[ 'key' => 'hp', 'type' => 'honeypot' ]`
+3. The `add_filter` callback MUST `return $schemas`
+4. Field `key`: alphanumeric + underscores only, unique within the form
+5. Sanitize: always `sanitize_text_field( wp_unslash( $_POST['key'] ) )` — never reverse the order
+6. Dates/times: always `gmdate()`, never `date()`
+7. File deletion: always `wp_delete_file()`, never `unlink()`
+8. `bot_message` required on every non-honeypot field when `step_mode` is `'chatbot'`
+
+---
+
+## File map
+
+| File | Purpose | Read when |
+|------|---------|-----------|
+| `llms.txt` | This file. Entry point for AI agents. | Always first |
+| `ai-reference.md` | Full schema reference + all features | Schema/feature work |
+| `includes/ajax-handlers.php` | AJAX endpoints, nonce validation | Form submission logic |
+| `includes/sanitizers.php` | Field sanitize/validate | Adding field types |
+| `includes/renderer.php` | HTML rendering (input/confirm/complete) | UI changes |
+| `includes/mailer.php` | Email sending, autoreply | Email feature changes |
+| `includes/file-upload.php` | File upload, MIME whitelist, cleanup | File feature changes |
+| `includes/access-control.php` | IP restriction, password auth | Access control changes |
+| `includes/conditions.php` | show_if / hide_if (deprecated, use show_if) / required_if logic | Conditional logic changes |
+| `includes/shortcode.php` | Shortcode registration, asset enqueue | Shortcode/asset changes |
+| `includes/settings-page.php` | WordPress admin UI | Admin UI changes |
+| `includes/chatbot.php` | Chatbot mode rendering | Chatbot changes |
+| `includes/step-renderer.php` | Step form rendering | Step form changes |
+| `includes/webhook.php` | Webhook dispatch | Webhook changes |
+| `includes/smtp.php` | SMTP configuration | SMTP changes |
+| `includes/iframe.php` | iframe embedding, CORS | iframe changes |
+| `HXFE-マニュアル.md` | Japanese user manual | User-facing docs only |
+
+---
+
+## Key features (summary)
+
+- 15 field types: text, email, tel, url, textarea, select, radio, checkbox, checkbox_group, number, date, file, honeypot, reCAPTCHA, privacy
+- 4 UI modes: normal / step / one-by-one / chatbot
+- Conditional logic: show_if, hide_if (deprecated, use show_if), required_if, skip_if, to_rules, subject_rules, complete_redirect_rules
+- Access control: IP restriction (CIDR supported) + form-level password authentication
+- File upload: attached to email, auto-deleted after send, MIME whitelist, .htaccess protection, confirm-screen support
+- Webhook: Zapier, Make, Slack, any HTTP endpoint
+- Built-in SMTP, reCAPTCHA v2/v3, iframe embedding with CORS
+- Page slug auto-injection: subject gets `[form-id@page-slug]` suffix for per-page tracking (disable_context: true to opt out)
+- Conditional complete HTML: `complete_html_rules` — show different HTML based on answers ({field_key} interpolation supported; omit `to` for diagnosis/no-email mode)
+- chatbot + conditional fields: `show_if` / `required_if` work in chatbot mode
+- Custom field validation: `pattern` / `minlength` / `maxlength` / `error_message` schema keys + `hxfe_validate_field` filter
+- Form-level validation: `hxfe_validate_form` filter for cross-field checks (password confirm, at-least-one, etc.)
+- Field HTML injection: `before_html` / `after_html` schema keys for inserting arbitrary HTML around fields
+- Download button after submit: `download_url` / `download_label` schema keys show a download button on complete screen
+- Form availability window: `available_from` / `available_until` / `before_html` / `after_html` with custom before/after HTML
+- Per-form iframe CORS: `allowed_origins` schema key overrides global CORS setting
+- Embed HTML code: admin UI shows copy-paste `<iframe>` HTML for external site embedding
+- Zero cookies for form state — GDPR compliant by design
+- CSS custom properties (design tokens) for easy theme integration
+- Responsive out of the box (≤768px breakpoint)
+- Current version: 1.3.7
+
+---
+
+## Version history (latest first)
+
+### v1.3.7
+- Security: Removed skip_sanitize parameter from hxfe_process_fields() — all values sanitized on every call
+- Security: iframe.php REVIEWER NOTE header added, phpcs:ignore comments strengthened
+- Security: field-renderers.php phpcs:ignore comments strengthened
+
+### v1.3.6
+- Security: Added nonce verification to hxfe_handle_back()
+- Security: Back button now passes hxfe_nonce via hx-vals
+- Fixed: Stable tag mismatch resolved
+
+### v1.3.5
+- Renamed schema key: `redirect_rules` → `complete_redirect_rules`
+- Renamed schema keys: `before_open_html` / `after_close_html` → `before_html` / `after_html`
+- Renamed field keys: `min_check` / `max_check` → `min` / `max`
+- Deprecated field key `hide_if` — use `show_if` instead (backward compatible)
+
+### v1.3.4
+- Added: Page slug auto-injection into subject (`[form-id@page-slug]` suffix)
+- Added: Schema examples panel in admin UI (7 copy-paste samples)
+- Added: Responsive support (≤768px breakpoint)
+- Added: `download_url` / `download_label` — download button shown on complete screen
+- Added: `available_from` / `available_until` — form availability window with custom HTML
+- Added: `before_html` / `after_html` — custom messages outside availability window
+- Added: `allowed_origins` schema key — per-form iframe CORS restriction
+- Added: Embed HTML `<iframe>` copy button in admin form list
+- Improved: Admin UI redesigned (stat cards, clean table, monospace field type chips)
+- Improved: chatbot send button replaced with paper-plane SVG icon
+- Improved: Login/auth screen styled with border and full-width button
+- Improved: Fade-in animation includes translateY for smoother feel
+- Improved: iframe / CORS Settings tab removed — now schema-level only
+- Fixed: hx-encoding="multipart/form-data" auto-added when file field present
+- Fixed: File name shown correctly on confirm screen
+- Fixed: File attachment via confirm screen (hxfe_file_paths in hx-vals)
+- Fixed: Temporary file cleanup cron (hourly, 1h expiry)
+- Fixed: Fade-in bug (remove+reflow caused flash)
+- Added: `complete_html_rules` — conditional complete screen HTML with {field_key} interpolation
+- Added: chatbot diagnosis mode (no-email) — omit `to` when using `complete_html_rules`
+- Added: chatbot + `show_if` / `required_if` conditional fields now supported
+- Added: `complete_html_rules` + `to_rules` combo — send email only for certain answers
+- Added: `pattern` / `minlength` / `maxlength` / `error_message` schema keys for field validation
+- Added: `hxfe_validate_field` filter — per-field custom validation hook
+- Added: `hxfe_validate_form` filter — form-level cross-field validation hook
+- Added: `before_html` / `after_html` schema keys — inject HTML before/after any field
+- Improved: chatbot UI redesigned (LINE/Slack style — header, timestamps, bubble shadows)
+
+### v1.3.3
+- Renamed: SHFE → HXFE across all PHP/JS/CSS files (class names, function prefixes, constants)
+- Fixed: Scroll after htmx swap (ID re-lookup after outerHTML replace)
+- Fixed: Step form Back button 403 (missing nonce in hx-vals)
+- Fixed: chatbot phpcs:ignore comment rendering as visible text
+- Fixed: Copy button HTTP fallback (execCommand for non-HTTPS environments)
+- Fixed: Shortcode copy buttons labeled "Form" / "iFrame"
+
+### v1.3.2
+- Added: IP restriction (`allowed_ips`, CIDR supported, `ip_blocked_html`)
+- Added: Form-level password authentication (`auth.users`)
+- Added: Brute-force protection (5 attempts → 15 min lockout)
+- Added: Secure auth session (httponly + samesite=strict cookie, per form ID)
+- New file: `includes/access-control.php`
+
+### v1.3.1
+- Added: File upload field (attached to email, auto-deleted after send)
+- Added: MIME whitelist (`mime_types`), HXFE safe defaults
+- Added: .htaccess protection for upload directory
+- New file: `includes/file-upload.php`
+
+### v1.3.0
+- Refactored: field renderers extracted to `includes/fields/field-renderers.php`
+- Refactored: `hxfe_validate_step_request()` added
+
+### v1.2.2
+- Fixed: hxfe-front.js enqueue, disable_default_css, chatbot.js loading, uninstall.php
+- Added: error_message, confirm_label schema keys
+
+### v1.2.1
+- Added: tel, url field types
+- Added: Webhook support
+- Added: submit_label, back_label, next_label, confirm_heading
+- Added: confirm: false for step forms
+- Added: built-in placeholders {site_name}, {site_url}, {date}, {time}
+- Added: admin form list with lint warnings
+
+### v1.2.0
+- Added: radio, checkbox_group, number, date, file field types
+- Added: chatbot UI mode
+- Added: 4 completion patterns, multiple recipients, cascade select
+
+### v1.1.0
+- Added: step forms, reCAPTCHA, privacy field, auto-reply, SMTP, iframe, conditional logic
+
+### v1.0.0
+- Initial release

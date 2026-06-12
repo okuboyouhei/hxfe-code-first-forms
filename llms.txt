@@ -108,11 +108,16 @@ add_filter( 'hxfe_schemas', function( $schemas ) {
 - Zero cookies for form state — GDPR compliant by design
 - CSS custom properties (design tokens) for easy theme integration
 - Responsive out of the box (≤768px breakpoint)
-- Current version: 1.3.9
+- Current version: 1.4.0
 
 ---
 
 ## Version history (latest first)
+
+### v1.4.0
+- Added: Error logging system (logger.php) — SMTP/Webhook/reCAPTCHA errors logged to wp-content/hxfe-logs/
+- Added: Settings → Form Engine — Logs admin page with color-coded log viewer and clear button
+- Added: Automatic log cleanup after 30 days, .htaccess protection on log directory
 
 ### v1.3.9
 - Fixed: htmx script handle renamed from 'htmx' to 'hxfe-htmx' to avoid conflicts with other plugins

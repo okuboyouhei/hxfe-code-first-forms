@@ -1,5 +1,7 @@
 # HXFE — Code-First Forms — AI Agent Reference
 
+**Current version: 1.4.0**
+
 ## What this file is
 
 This file is an instruction set for AI coding assistants (Claude, Copilot, Cursor, Gemini, etc.).

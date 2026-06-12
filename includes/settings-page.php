@@ -860,3 +860,84 @@ function hxfe_render_form_list_page() {
 	</div><!-- .wrap -->
 	<?php
 }
+
+/* ---------------------------------------------------------------------------
+ * ログページ
+ * ------------------------------------------------------------------------- */
+
+add_action( 'admin_menu', 'hxfe_add_log_page' );
+
+function hxfe_add_log_page() {
+	add_submenu_page(
+		'options-general.php',
+		__( 'Error Logs', 'hxfe-code-first-forms' ),
+		__( 'Form Engine — Logs', 'hxfe-code-first-forms' ),
+		'manage_options',
+		'hxfe-logs',
+		'hxfe_render_log_page'
+	);
+}
+
+function hxfe_render_log_page() {
+	if ( ! current_user_can( 'manage_options' ) ) { return; }
+
+	// ログクリアの処理
+	if (
+		isset( $_POST['hxfe_clear_logs'] ) &&
+		isset( $_POST['hxfe_clear_logs_nonce'] ) &&
+		wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['hxfe_clear_logs_nonce'] ) ), 'hxfe_clear_logs' )
+	) {
+		hxfe_clear_all_logs();
+		echo '<div class="notice notice-success"><p>' . esc_html__( 'All logs cleared.', 'hxfe-code-first-forms' ) . '</p></div>';
+	}
+
+	$logs = hxfe_get_recent_logs( 7 );
+
+	?>
+	<div class="wrap">
+	<h1><?php esc_html_e( 'Form Engine — Error Logs', 'hxfe-code-first-forms' ); ?></h1>
+	<p style="color:#666;">
+		<?php esc_html_e( 'Last 7 days of error logs. Logs are automatically deleted after 30 days.', 'hxfe-code-first-forms' ); ?>
+	</p>
+
+	<form method="post" style="margin-bottom:16px;">
+		<?php wp_nonce_field( 'hxfe_clear_logs', 'hxfe_clear_logs_nonce' ); ?>
+		<button type="submit" name="hxfe_clear_logs" class="button button-secondary"
+			onclick="return confirm('<?php esc_attr_e( 'Clear all logs? This cannot be undone.', 'hxfe-code-first-forms' ); ?>');">
+			<?php esc_html_e( 'Clear All Logs', 'hxfe-code-first-forms' ); ?>
+		</button>
+	</form>
+
+	<?php if ( empty( $logs ) ) : ?>
+		<div class="notice notice-info inline">
+			<p><?php esc_html_e( 'No error logs found. Great — everything is working smoothly!', 'hxfe-code-first-forms' ); ?></p>
+		</div>
+	<?php else : ?>
+		<?php foreach ( $logs as $log ) : ?>
+		<h2 style="font-size:14px; margin-top:24px;"><?php echo esc_html( $log['date'] ); ?></h2>
+		<div style="background:#1e1e1e; color:#d4d4d4; font-family:monospace; font-size:12px; padding:12px 16px; border-radius:4px; overflow-x:auto; max-height:400px; overflow-y:auto;">
+			<?php foreach ( $log['lines'] as $line ) : ?>
+				<?php
+				// エラー種別で色分け
+				$color = '#d4d4d4';
+				if ( str_contains( $line, 'SMTP_ERROR' ) ) {
+					$color = '#f48771';
+				} elseif ( str_contains( $line, 'WEBHOOK_ERROR' ) ) {
+					$color = '#dcdcaa';
+				} elseif ( str_contains( $line, 'RECAPTCHA_ERROR' ) ) {
+					$color = '#9cdcfe';
+				} elseif ( str_contains( $line, 'FILE_ERROR' ) ) {
+					$color = '#ce9178';
+				}
+				?>
+				<div style="color:<?php echo esc_attr( $color ); ?>; padding:2px 0; border-bottom:1px solid #2d2d2d;">
+					<?php echo esc_html( $line ); ?>
+				</div>
+			<?php endforeach; ?>
+		</div>
+		<?php endforeach; ?>
+	<?php endif; ?>
+
+	</div><!-- .wrap -->
+	<?php
+}

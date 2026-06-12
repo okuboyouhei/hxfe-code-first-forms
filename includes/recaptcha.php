@@ -202,6 +202,7 @@ function hxfe_validate_recaptcha( array $field, string $token ) {
 	] );
 
 	if ( is_wp_error( $response ) ) {
+		hxfe_log_error( 'RECAPTCHA_ERROR', 'recaptcha', 'API request failed: ' . $response->get_error_message() );
 		return [
 			'value' => '',
 			'error' => __( 'reCAPTCHA verification failed. Please try again.', 'hxfe-code-first-forms' ),
@@ -215,6 +216,7 @@ function hxfe_validate_recaptcha( array $field, string $token ) {
 	if ( 'v3' === $cfg['version'] && $success ) {
 		$score = (float) ( $body['score'] ?? 0 );
 		if ( $score < $cfg['threshold'] ) {
+			hxfe_log_error( 'RECAPTCHA_ERROR', 'recaptcha', "Score too low: {$score} (threshold: {$cfg['threshold']})" );
 			return [
 				'value' => '',
 				'error' => __( 'reCAPTCHA score too low. Please try again.', 'hxfe-code-first-forms' ),
@@ -223,6 +225,8 @@ function hxfe_validate_recaptcha( array $field, string $token ) {
 	}
 
 	if ( ! $success ) {
+		$codes = implode( ', ', $body['error-codes'] ?? [] );
+		hxfe_log_error( 'RECAPTCHA_ERROR', 'recaptcha', "Verification failed: {$codes}" );
 		return [
 			'value' => '',
 			'error' => __( 'reCAPTCHA verification failed. Please try again.', 'hxfe-code-first-forms' ),

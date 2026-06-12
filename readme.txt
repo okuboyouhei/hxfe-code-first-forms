@@ -4,7 +4,7 @@ Tags: contact form, form builder, htmx, chatbot, ajax
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.3.9
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,6 +22,7 @@ This means your forms live in your codebase — version-controlled with Git, aut
 * **Deploy without fear** — Forms are code, so they deploy with your theme. No more "the form disappeared on production"
 * **Dynamic options** — Pull select options from `get_posts()`, taxonomies, or any PHP source. No manual updates
 * **One schema, four UIs** — Add `step_mode: chatbot` or `one_by_one` to transform the same fields into a completely different interface
+* **AI-friendly by design** — Forms defined as PHP arrays can be read and edited directly by AI coding tools. Ask Claude or Copilot to "add a phone number field" and get back a diff-ready code change — no screenshots needed
 
 = Four UI modes from one schema =
 
@@ -129,6 +130,18 @@ Or use HXFE as a standalone plugin with `glob()` auto-loading.
 
 == Frequently Asked Questions ==
 
+= What is htmx and why does HXFE use it? =
+
+[htmx](https://htmx.org/) is a lightweight JavaScript library that lets you add AJAX behavior using HTML attributes — no build step, no npm, no React required. HXFE uses htmx to handle the form's input → confirm → complete flow without page reloads. Since htmx works with server-rendered HTML (which WordPress and PHP are great at), it fits naturally into a WordPress plugin.
+
+= Can I use HXFE with AI coding tools like Claude, Cursor, or GitHub Copilot? =
+
+Yes — this is one of HXFE's strengths. Because forms are defined as PHP arrays, AI tools can read and edit them directly. HXFE ships with `llms.txt` and `ai-reference.md` that AI agents can reference to understand the schema format. Just ask your AI assistant to "add a phone number field to the contact schema" and it will return a precise code change — no screenshots or GUI interaction needed.
+
+= Is HXFE secure? =
+
+Yes. HXFE follows WordPress security best practices throughout: nonce verification on all AJAX endpoints, sanitization on input, escaping on output, `hash_equals()` for password comparison, and `REMOTE_ADDR`-only IP matching to prevent spoofing. reCAPTCHA fields fail closed in production if misconfigured. Uploaded files are deleted immediately after email delivery. The plugin has passed WordPress.org's manual security review.
+
 = Does HXFE save submissions to the database? =
 
 No. HXFE sends email only. This is intentional — forms defined in code stay lightweight and free of database dependencies. Use Webhook support to send data to external services like Google Sheets or a CRM.
@@ -206,6 +219,14 @@ reCAPTCHA is **disabled by default**. It is only active when a site administrato
 * Google Privacy Policy: https://policies.google.com/privacy
 
 == Changelog ==
+
+= 1.4.0 =
+* Added: Error logging system — SMTP, Webhook, and reCAPTCHA errors are now logged to `wp-content/hxfe-logs/`
+* Added: Settings → Form Engine — Logs page to view and clear error logs from the admin
+* Added: Logs are color-coded by error type (SMTP / Webhook / reCAPTCHA / File)
+* Added: Automatic log cleanup after 30 days
+* Added: `.htaccess` protection on the log directory to prevent web access
+* Changed: Error logging now always active (previously required WP_DEBUG)
 
 = 1.3.9 =
 * Fixed: Renamed htmx script handle from 'htmx' to 'hxfe-htmx' to avoid conflicts with other plugins loading htmx

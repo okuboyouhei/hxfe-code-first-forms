@@ -87,9 +87,8 @@ function hxfe_send_admin_notification( array $schema, array $values, array $file
 	$attachments = array_values( array_filter( $file_paths, 'file_exists' ) );
 
 	$ok = wp_mail( $to, $subject, $body, $headers, $attachments );
-	if ( ! $ok && defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-		error_log( '[HXFE] wp_mail() failed — To: ' . esc_html( $to ) . ' Subject: ' . esc_html( $subject ) );
+	if ( ! $ok ) {
+		hxfe_log_error( 'SMTP_ERROR', $schema['id'] ?? 'unknown', 'wp_mail() failed — To: ' . $to . ' | Subject: ' . $subject );
 	}
 	return $ok;
 }

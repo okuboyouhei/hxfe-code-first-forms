@@ -3,7 +3,7 @@
  * Plugin Name: HXFE — Code-First Forms
  * Plugin URI:  https://wordpress.org/plugins/hxfe-code-first-forms/
  * Description: Code-first form engine. Define forms as PHP arrays — contact forms, step forms, chatbots, and surveys from one schema. Git-manageable, deploy-safe, zero cookies.
- * Version:     1.3.9
+ * Version:     1.4.0
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * Author:      Youhei Okubo
@@ -19,12 +19,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HXFE_VERSION',     '1.3.9' );
+define( 'HXFE_VERSION',     '1.4.0' );
 define( 'HXFE_PLUGIN_DIR',  plugin_dir_path( __FILE__ ) );
 define( 'HXFE_PLUGIN_URL',  plugin_dir_url( __FILE__ ) );
 define( 'HXFE_PLUGIN_FILE', __FILE__ );
 define( 'HXFE_HTMX_VERSION', '1.9.12' );
 
+require_once HXFE_PLUGIN_DIR . 'includes/logger.php';
 require_once HXFE_PLUGIN_DIR . 'includes/conditions.php';
 require_once HXFE_PLUGIN_DIR . 'includes/sanitizers.php';
 require_once HXFE_PLUGIN_DIR . 'includes/schema.php';

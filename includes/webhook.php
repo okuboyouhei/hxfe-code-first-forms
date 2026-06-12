@@ -43,10 +43,7 @@ function hxfe_dispatch_webhooks( array $schema, array $values ) {
 	foreach ( $webhooks as $i => $webhook ) {
 		$url = $webhook['url'] ?? '';
 		if ( empty( $url ) || ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
-			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-				error_log( "[HXFE] Webhook [{$i}]: Invalid or missing URL" );
-			}
+			hxfe_log_error( 'WEBHOOK_ERROR', $schema['id'] ?? 'unknown', "Webhook [{$i}]: Invalid or missing URL" );
 			continue;
 		}
 
@@ -109,18 +106,12 @@ function hxfe_send_single_webhook( array $webhook, array $values, array $schema 
 
 	// エラーハンドリング（フォーム送信は止めない）
 	if ( is_wp_error( $response ) ) {
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-			error_log( '[HXFE] Webhook failed: ' . $response->get_error_message() . ' URL: ' . $url );
-		}
+		hxfe_log_error( 'WEBHOOK_ERROR', $schema['id'] ?? 'unknown', 'Request failed: ' . $response->get_error_message() . ' | URL: ' . $url );
 		return;
 	}
 
 	$code = wp_remote_retrieve_response_code( $response );
 	if ( $code < 200 || $code >= 300 ) {
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-			error_log( "[HXFE] Webhook returned HTTP {$code}. URL: {$url}" );
-		}
+		hxfe_log_error( 'WEBHOOK_ERROR', $schema['id'] ?? 'unknown', "HTTP {$code} | URL: {$url}" );
 	}
 }

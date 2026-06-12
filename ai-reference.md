@@ -71,6 +71,31 @@ add_filter( 'hxfe_schemas', function( $schemas ) {
 
 ---
 
+## Schema linter — warning messages
+
+HXFE validates every registered schema on `init` and shows warnings in the admin form list. The following messages may appear:
+
+| Warning | Cause | Fix |
+|---|---|---|
+| `Missing: id` | Schema has no `id` key | Add `'id' => 'your-form-id'` |
+| `Missing: 'to' or 'to_rules'` | No recipient email | Add `'to' => 'admin@example.com'` |
+| `Invalid email in 'to'` | Invalid email address | Fix the email address |
+| `Missing: 'subject'` | No subject line | Add `'subject' => 'Contact: {name}'` |
+| `Missing or invalid: 'fields'` | No fields array | Add `'fields' => [...]` |
+| `Missing 'key'` | A field has no `key` | Add `'key' => 'field-name'` to the field |
+| `Duplicate key` | Two fields share the same key | Make each field key unique |
+| `Unknown type` | Invalid field type | Use one of the 15 supported types |
+| `needs 'options' array` | select/radio/checkbox_group missing options | Add `'options' => [...]` |
+| `Missing 'label'` | Field has no label | Add `'label' => 'Field Name'` |
+| `cascade_from requires cascade_options` | cascade_from set but no cascade_options | Add `'cascade_options' => [...]` |
+| `chatbot mode requires 'bot_message'` | chatbot field missing bot_message | Add `'bot_message' => 'Question text'` |
+| `recaptcha field has no secret key` | reCAPTCHA not configured | Set secret key in Settings → HXFE |
+| `Recommended: add a honeypot field` | No spam protection | Add `[ 'key' => 'hp', 'type' => 'honeypot' ]` |
+| `steps[N]: Missing 'fields'` | A step has no fields list | Add `'fields' => ['key1', 'key2']` to the step |
+| `steps[N]: Unknown field key` | Step references a non-existent field key | Check field key spelling |
+
+---
+
 ## Schema keys — complete reference
 
 ```

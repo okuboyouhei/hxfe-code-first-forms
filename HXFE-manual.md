@@ -1702,6 +1702,31 @@ $schemas['contact'] = [
 
 [▲ 目次に戻る](#toc)
 
+## 管理画面のlint警告一覧 {#lint}
+
+管理画面（設定 → Form Engine）のフォーム一覧で `⚠` マークが表示された場合、スキーマに問題があります。以下の警告メッセージと対処法を参照してください。
+
+| 警告メッセージ | 原因 | 対処法 |
+|---|---|---|
+| `Missing: id` | `id` キーがない | `'id' => 'フォームID'` を追加 |
+| `Missing: 'to' or 'to_rules'` | 送信先メールがない | `'to' => 'admin@example.com'` を追加 |
+| `Invalid email in 'to'` | メールアドレスが不正 | 正しいメールアドレスに修正 |
+| `Missing: 'subject'` | 件名がない | `'subject' => '件名: {name}'` を追加 |
+| `Missing or invalid: 'fields'` | fieldsがない | `'fields' => [...]` を追加 |
+| `Missing 'key'` | フィールドにkeyがない | `'key' => 'フィールド名'` を追加 |
+| `Duplicate key` | 同じkeyが重複している | 各フィールドのkeyを一意にする |
+| `Unknown type` | 存在しないフィールドタイプ | 15種類の有効なtypeを使用する |
+| `needs 'options' array` | select/radio/checkbox_groupにoptionsがない | `'options' => [...]` を追加 |
+| `Missing 'label'` | フィールドにlabelがない | `'label' => 'フィールド名'` を追加 |
+| `cascade_from requires cascade_options` | cascade_fromにcascade_optionsがない | `'cascade_options' => [...]` を追加 |
+| `chatbot mode requires 'bot_message'` | chatbotモードのフィールドにbot_messageがない | `'bot_message' => '質問文'` を追加 |
+| `recaptcha field has no secret key` | reCAPTCHAのシークレットキーが未設定 | 設定 → HXFE でシークレットキーを設定 |
+| `Recommended: add a honeypot field` | スパム対策フィールドがない | `[ 'key' => 'hp', 'type' => 'honeypot' ]` を追加 |
+| `steps[N]: Missing 'fields'` | ステップにfieldsがない | ステップに `'fields' => ['key1', 'key2']` を追加 |
+| `steps[N]: Unknown field key` | ステップに存在しないフィールドkeyがある | フィールドkeyのスペルを確認 |
+
+---
+
 ## よくある質問 {#faq}
 
 ### Q: フォームを送信してもメールが届かない {#faq-mail}

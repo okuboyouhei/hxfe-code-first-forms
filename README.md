@@ -1,8 +1,8 @@
 # HXFE — Code-First Forms
 
-**Define WordPress forms as PHP arrays. No GUI. No database. Git-managed.**
+**Define WordPress forms as PHP arrays. AI-ready, Git-managed, zero database.**
 
-[![WordPress Plugin Version](https://img.shields.io/badge/version-1.3.7-blue)](https://wordpress.org/plugins/hxfe-code-first-forms/)
+[![WordPress Plugin Version](https://img.shields.io/badge/version-1.4.0-blue)](https://wordpress.org/plugins/hxfe-code-first-forms/)
 [![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-blue)](https://wordpress.org)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-purple)](https://php.net)
 [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green)](https://www.gnu.org/licenses/gpl-2.0.html)
@@ -16,6 +16,10 @@
 HXFE is a code-first WordPress form plugin powered by [htmx](https://htmx.org/). Instead of building forms in a GUI, you define them as PHP arrays and place a shortcode anywhere.
 
 **HXFE** stands for **htmx Form Engine**.
+
+Because forms are PHP arrays, AI coding tools (Claude, Cursor, GitHub Copilot) can read and edit them directly — no screenshots, no GUI walkthroughs, no copy-paste. Ask your AI assistant to "add a phone number field" and get back a diff-ready code change instantly.
+
+HXFE ships with `llms.txt`, `ai-reference.md`, and `CLAUDE.md` so AI agents understand the schema format out of the box — the lowest-cost way to build and maintain WordPress forms with AI.
 
 ```php
 add_filter( 'hxfe_schemas', function( $schemas ) {
@@ -46,11 +50,11 @@ That's it. Your form is now Git-managed, deploy-safe, and AI-friendly.
 
 | Problem with GUI builders | HXFE solution |
 |---|---|
+| AI can't edit forms directly | Forms are PHP arrays — AI reads and writes them natively |
 | Forms stored in database | Forms live in your codebase |
 | Can't track changes in Git | Every change shows in `git diff` |
 | Forms disappear after deploy | Forms deploy with your theme |
 | Hard to generate dynamic options | Just use PHP — `get_posts()`, taxonomies, etc. |
-| AI can't edit the form directly | AI writes PHP arrays directly |
 
 ---
 

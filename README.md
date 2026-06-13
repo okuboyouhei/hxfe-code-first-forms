@@ -114,6 +114,163 @@ Ask your AI assistant to add a field, change routing logic, or build a chatbot s
 
 ---
 
+## Quick Reference
+
+### Minimal contact form
+
+```php
+add_filter( 'hxfe_schemas', function( $schemas ) {
+    $schemas['contact'] = [
+        'id'      => 'contact',
+        'to'      => 'admin@example.com',
+        'subject' => 'Contact: {name}',
+        'fields'  => [
+            [ 'key' => 'name',    'type' => 'text',     'label' => 'Name',    'required' => true ],
+            [ 'key' => 'email',   'type' => 'email',    'label' => 'Email',   'required' => true ],
+            [ 'key' => 'message', 'type' => 'textarea', 'label' => 'Message', 'required' => true ],
+            [ 'key' => 'hp',      'type' => 'honeypot' ], // always include
+        ],
+    ];
+    return $schemas;
+} );
+```
+
+`[hxfe_form id="contact"]`
+
+---
+
+### Field types (15 total)
+
+`text` `email` `tel` `url` `number` `date` `textarea` `select` `radio` `checkbox` `checkbox_group` `file` `honeypot` `recaptcha` `privacy`
+
+---
+
+### Key schema keys
+
+| Key | Type | Description |
+|---|---|---|
+| `id` | string | **Required.** Form ID (alphanumeric + hyphens) |
+| `to` | string | Recipient email. Empty = no email sent (diagnosis mode) |
+| `to_rules` | array | Dynamic routing: `[['when'=>[...],'to'=>'...']]` |
+| `subject` | string | Email subject. Supports `{field_key}` interpolation |
+| `fields` | array | **Required.** Array of field definitions |
+| `step_mode` | string | `'chatbot'` or `'one_by_one'` |
+| `bot_name` | string | Chatbot display name (chatbot mode) |
+| `bot_icon` | string | Emoji or image URL (chatbot mode) |
+| `greeting` | string | Chatbot opening message (chatbot mode) |
+| `complete_message` | string | Completion message. Supports `{field_key}` |
+| `complete_html` | string | Custom HTML on completion screen |
+| `complete_html_rules` | array | Conditional HTML: `[['when'=>[...],'html'=>'...']]` |
+| `complete_redirect` | string | Redirect URL after submission |
+| `confirm` | bool | Show confirmation screen (default: true) |
+| `webhooks` | array | Webhook definitions |
+| `steps` | array | Step form: `[['label'=>'...','fields'=>['key1','key2']]]` |
+
+---
+
+### Key field keys
+
+| Key | Type | Description |
+|---|---|---|
+| `key` | string | **Required.** Unique field identifier |
+| `type` | string | **Required.** Field type |
+| `label` | string | Field label |
+| `required` | bool | Validation: required |
+| `placeholder` | string | Input placeholder |
+| `options` | array | For select/radio/checkbox_group: `[['value'=>'...','label'=>'...']]` |
+| `bot_message` | string | **Required in chatbot mode.** Question text |
+| `show_if` | array | Conditional display: `['field_key', 'operator', 'value']` |
+| `required_if` | array | Conditional required |
+| `skip_if` | array | Skip field if condition met |
+| `before_html` | string | HTML inserted before field |
+| `after_html` | string | HTML inserted after field |
+| `min` / `max` | int | Min/max for number, checkbox_group |
+| `min_date` / `max_date` | string | Min/max date (Y-m-d) |
+| `maxlength` | int | Max character length |
+
+---
+
+### Conditional logic operators
+
+`==` `!=` `>` `>=` `<` `<=` `contains` `not_contains`
+
+```php
+// Single condition
+'show_if' => [ 'type', '==', 'other' ]
+
+// AND
+'show_if' => [ 'and', [
+    [ 'budget', '==', 'high' ],
+    [ 'size',   '==', 'large' ],
+]]
+
+// OR
+'show_if' => [ 'or', [
+    [ 'plan', '==', 'a' ],
+    [ 'plan', '==', 'b' ],
+]]
+```
+
+---
+
+### Chatbot mode
+
+```php
+$schemas['support'] = [
+    'id'        => 'support',
+    'to'        => 'support@example.com',
+    'subject'   => 'Support: {name}',
+    'step_mode' => 'chatbot',
+    'bot_name'  => 'Support Bot',
+    'bot_icon'  => '🤖',
+    'greeting'  => 'Hi! How can I help you today?',
+    'fields'    => [
+        [ 'key' => 'name',    'type' => 'text',  'label' => 'Name',
+          'bot_message' => 'What is your name?',              'required' => true ],
+        [ 'key' => 'email',   'type' => 'email', 'label' => 'Email',
+          'bot_message' => 'Thanks {name}! What is your email?', 'required' => true ],
+        [ 'key' => 'message', 'type' => 'textarea', 'label' => 'Message',
+          'bot_message' => 'How can I help you?',             'required' => true ],
+        [ 'key' => 'hp', 'type' => 'honeypot' ],
+    ],
+];
+```
+
+> **Note:** `bot_message` is required for every non-honeypot field in chatbot mode.
+
+---
+
+### Diagnosis mode (no email)
+
+```php
+$schemas['quiz'] = [
+    'id'      => 'quiz',
+    'to'      => '',  // no email sent
+    'confirm' => false,
+    'complete_html_rules' => [
+        [ 'when' => [ 'plan', '==', 'basic' ],
+          'html' => '<h2>Basic plan recommended</h2><p>Hi {name}!</p>' ],
+        [ 'when' => [ 'plan', '==', 'premium' ],
+          'html' => '<h2>Premium plan recommended</h2>' ],
+        [ 'when' => 'default',
+          'html' => '<p>Thank you, {name}.</p>' ],
+    ],
+    'fields' => [ ... ],
+];
+```
+
+---
+
+### What HXFE does NOT support
+
+- Saving submissions to the WordPress database (use Webhooks → Google Sheets / Zapier instead)
+- `rows` attribute on textarea (use CSS to control height)
+- `{field_label}` interpolation — only `{field_key}` (the submitted value) is supported
+- Repeater / nested fields
+- File upload preview before submission
+
+---
+
 ## Requirements
 
 - WordPress 6.0+

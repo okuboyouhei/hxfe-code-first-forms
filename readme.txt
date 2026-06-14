@@ -4,25 +4,25 @@ Tags: contact form, form builder, htmx, chatbot, ajax
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Define forms as PHP arrays. Contact forms, step forms, chatbots, and surveys — all from one schema, no GUI required.
+Define forms as PHP arrays. AI-ready, Git-managed, zero database — contact forms, step forms, chatbots, and surveys from one schema.
 
 == Description ==
 
 **HXFE — Code-First Forms** is a code-first WordPress form plugin. Instead of building forms in a GUI, you define them as PHP arrays and place a shortcode anywhere.
 
-This means your forms live in your codebase — version-controlled with Git, automatically deployed, and free from database migration issues.
+Because forms are PHP arrays, AI coding tools (Claude, Cursor, GitHub Copilot) can read and edit them directly — no screenshots, no GUI walkthroughs, no copy-paste. Your forms live in your codebase: version-controlled, automatically deployed, and free from database migration issues.
 
 = Why code-first? =
 
+* **AI-ready by design** — Forms defined as PHP arrays are the lowest-cost input for AI agents. Ask Claude or Copilot to "add a phone number field" and get back a diff-ready code change instantly. No screenshots needed, no GUI explanation required. Ships with `llms.txt`, `ai-reference.md`, and `CLAUDE.md` for agentic coding tools
 * **Git history for free** — Every change to your form shows up in `git diff`
 * **Deploy without fear** — Forms are code, so they deploy with your theme. No more "the form disappeared on production"
 * **Dynamic options** — Pull select options from `get_posts()`, taxonomies, or any PHP source. No manual updates
 * **One schema, four UIs** — Add `step_mode: chatbot` or `one_by_one` to transform the same fields into a completely different interface
-* **AI-friendly by design** — Forms defined as PHP arrays can be read and edited directly by AI coding tools. Ask Claude or Copilot to "add a phone number field" and get back a diff-ready code change — no screenshots needed
 
 = Four UI modes from one schema =
 
@@ -219,6 +219,11 @@ reCAPTCHA is **disabled by default**. It is only active when a site administrato
 * Google Privacy Policy: https://policies.google.com/privacy
 
 == Changelog ==
+
+= 1.4.1 =
+* Updated: htmx updated from 1.9.12 to 2.0.10
+* Changed: htmx script handle renamed from 'hxfe-htmx' to 'hx-htmx' for cross-plugin compatibility (HX series shared handle)
+* Improved: Added duplicate registration check via wp_script_is() to prevent loading htmx multiple times
 
 = 1.4.0 =
 * Added: Error logging system — SMTP, Webhook, and reCAPTCHA errors are now logged to `wp-content/hxfe-logs/`

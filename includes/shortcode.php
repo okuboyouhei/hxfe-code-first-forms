@@ -86,18 +86,22 @@ function hxfe_shortcode_handler( $atts ) {
 function hxfe_enqueue_assets( array $schema = [] ) {
 	$form_id = $schema['id'] ?? '';
 
-	wp_enqueue_script(
-		'hxfe-htmx',
-		HXFE_PLUGIN_URL . 'assets/js/htmx.min.js',
-		[],
-		HXFE_HTMX_VERSION,
-		true
-	);
+	// HXシリーズ共通ハンドル名で登録（重複読み込み防止）
+	if ( ! wp_script_is( 'hx-htmx', 'registered' ) ) {
+		wp_register_script(
+			'hx-htmx',
+			HXFE_PLUGIN_URL . 'assets/js/htmx.min.js',
+			[],
+			HXFE_HTMX_VERSION,
+			true
+		);
+	}
+	wp_enqueue_script( 'hx-htmx' );
 
 	wp_enqueue_script(
 		'hxfe-front',
 		HXFE_PLUGIN_URL . 'assets/js/hxfe-front.js',
-		[ 'hxfe-htmx' ],
+		[ 'hx-htmx' ],
 		HXFE_VERSION,
 		true
 	);
@@ -107,7 +111,7 @@ function hxfe_enqueue_assets( array $schema = [] ) {
 		wp_enqueue_script(
 			'hxfe-chatbot',
 			HXFE_PLUGIN_URL . 'assets/js/hxfe-chatbot.js',
-			[ 'hxfe-htmx' ],
+			[ 'hx-htmx' ],
 			HXFE_VERSION,
 			true
 		);

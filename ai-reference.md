@@ -1,6 +1,6 @@
 # HXFE — Code-First Forms — AI Agent Reference
 
-**Current version: 1.4.0**
+**Current version: 1.4.1**
 
 ## What this file is
 

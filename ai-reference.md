@@ -57,7 +57,7 @@ add_filter( 'hxfe_schemas', function( $schemas ) {
 | `email` | Email with @ validation | `maxlength`, `placeholder` |
 | `tel` | Phone number | `placeholder` |
 | `url` | URL with https:// validation | `placeholder` |
-| `textarea` | Multi-line text | `rows`, `maxlength` |
+| `textarea` | Multi-line text | `maxlength`, `placeholder` — Note: `rows` is NOT supported; control height via CSS |
 | `select` | Dropdown | `options` (required) |
 | `radio` | Radio buttons | `options` (required), `value` (default) |
 | `checkbox` | Single checkbox | `label` |
@@ -329,15 +329,22 @@ useful for per-page aggregation in the spreadsheet (pivot tables, filters, etc.)
 
 ## Built-in interpolation placeholders
 
-Use in `subject`, `autoreply_body`, `bot_message`, `complete_message`:
+Use in `subject`, `autoreply_body`, `bot_message`, `complete_message`, `complete_html`, `complete_html_rules[].html`:
 
 ```
-{field_key}   → submitted value of that field
+{field_key}   → submitted VALUE of that field (not the label)
 {site_name}   → WordPress site name
 {site_url}    → Site URL
 {date}        → Today's date (Y-m-d)
 {time}        → Current time (H:i)
 ```
+
+> **Important:** `{field_key}` inserts the submitted **value**, not the field label.
+> For example, if a radio field has `value: 'billing'` and `label: '💳 お支払い・請求について'`,
+> `{category}` will output `billing`, not `💳 お支払い・請求について`.
+> `{field_label}` is NOT supported. To show a human-readable label in email subjects or
+> completion messages, use `to_rules`/`complete_html_rules` with explicit text, or define
+> the label text directly in the interpolated string.
 
 ---
 
@@ -659,6 +666,28 @@ $schemas['hr'] = [
 - Does NOT have a GUI form builder
 - File uploads are attached to email only — NOT saved to Media Library
 - `file` field type: one file per field; for multiple files, use multiple `file` fields
+- `rows` attribute on `textarea` is NOT supported — control height via CSS
+- `{field_label}` interpolation is NOT supported — only `{field_key}` (submitted value)
+- Repeater / nested fields are NOT supported
+- File upload preview before submission is NOT supported
+
+---
+
+## Error logging (v1.4.0+)
+
+HXFE logs SMTP, Webhook, and reCAPTCHA errors to `wp-content/hxfe-logs/` as plain text files.
+Logs are viewable in **Settings → Form Engine — Logs**.
+
+Log format:
+```
+[2026-06-13 10:00:00] SMTP_ERROR | form:contact | wp_mail() failed — To: admin@example.com
+[2026-06-13 10:01:00] WEBHOOK_ERROR | form:contact | HTTP 500 | URL: https://hooks.zapier.com/...
+[2026-06-13 10:02:00] RECAPTCHA_ERROR | recaptcha | Score too low: 0.2 (threshold: 0.5)
+```
+
+- Logs are automatically deleted after 30 days
+- Log directory is protected by `.htaccess` (web access blocked)
+- Does NOT use the database — consistent with HXFE's zero-database design
 
 ---
 

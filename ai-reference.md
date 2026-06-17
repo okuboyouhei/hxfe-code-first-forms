@@ -1,10 +1,12 @@
 # HXFE — Code-First Forms — AI Agent Reference
 
-**Current version: 1.4.1**
+**Current version: 1.4.0**
 
 ## What this file is
 
-This file is an instruction set for AI coding assistants (Claude, Copilot, Cursor, Gemini, etc.).
+This file is an instruction set for AI coding assistants (Claude, Copilot, Cursor, Codex, Gemini, etc.).
+
+Even if the user does not write PHP themselves, AI agents can generate and maintain HXFE schemas entirely from plain-language instructions. The schema structure is intentionally simple and consistent to minimize token cost and maximize AI accuracy.
 Read this before generating any HXFE-related code.
 
 ---

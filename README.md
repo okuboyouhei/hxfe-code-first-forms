@@ -17,9 +17,11 @@ HXFE is a code-first WordPress form plugin powered by [htmx](https://htmx.org/).
 
 **HXFE** stands for **htmx Form Engine**.
 
-Because forms are PHP arrays, AI coding tools (Claude, Cursor, GitHub Copilot) can read and edit them directly — no screenshots, no GUI walkthroughs, no copy-paste. Ask your AI assistant to "add a phone number field" and get back a diff-ready code change instantly.
+Because forms are PHP arrays, AI coding tools (Claude, Cursor, GitHub Copilot, Codex) can read and edit them directly — no screenshots, no GUI walkthroughs, no copy-paste. Ask your AI assistant to "add a phone number field" and get back a diff-ready code change instantly.
 
 HXFE ships with `llms.txt`, `ai-reference.md`, and `CLAUDE.md` so AI agents understand the schema format out of the box — the lowest-cost way to build and maintain WordPress forms with AI.
+
+**You don't need to write PHP yourself.** AI agents like Claude, Codex, or Cursor can generate and maintain the entire schema from plain-language instructions.
 
 ```php
 add_filter( 'hxfe_schemas', function( $schemas ) {
@@ -288,7 +290,7 @@ No. HXFE sends email only. Use Webhook support to send data to Google Sheets, a 
 [htmx](https://htmx.org/) is a lightweight JS library that adds AJAX behavior via HTML attributes — no build step, no npm, no React. HXFE uses it for the input → confirm → complete flow without page reloads. It fits naturally with WordPress's server-rendered PHP.
 
 **Q: Can I use HXFE with AI coding tools?**
-Yes — this is one of HXFE's strengths. Forms defined as PHP arrays can be read and edited directly by AI tools. HXFE ships with `llms.txt` and `ai-reference.md` for AI agents to reference. Ask Claude or Copilot to "add a phone number field" and get back a diff-ready code change.
+Yes — this is one of HXFE's strengths. Forms defined as PHP arrays can be read and edited directly by AI tools. HXFE ships with `llms.txt` and `ai-reference.md` for AI agents to reference. Ask Claude, Copilot, Cursor, or Codex to "add a phone number field" and get back a diff-ready code change. You don't need to write PHP yourself — AI agents can build and maintain your forms from plain-language instructions.
 
 **Q: Is HXFE GDPR compliant?**
 Yes. Zero cookies. Form state is preserved via hidden JSON fields server-side, not browser storage.

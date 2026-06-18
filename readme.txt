@@ -4,21 +4,23 @@ Tags: contact form, form builder, htmx, chatbot, ajax
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.4.1
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Define forms as PHP arrays. AI-ready, Git-managed, zero database — contact forms, step forms, chatbots, and surveys from one schema.
+Define forms as PHP arrays. AI-ready, Git-managed, zero database — contact forms, step forms, chatbots, and surveys from one schema. Powered by htmx — no page reloads.
 
 == Description ==
 
 **HXFE — Code-First Forms** is a code-first WordPress form plugin. Instead of building forms in a GUI, you define them as PHP arrays and place a shortcode anywhere.
 
-Because forms are PHP arrays, AI coding tools (Claude, Cursor, GitHub Copilot) can read and edit them directly — no screenshots, no GUI walkthroughs, no copy-paste. Your forms live in your codebase: version-controlled, automatically deployed, and free from database migration issues.
+Because forms are PHP arrays, AI coding tools (Claude, Cursor, GitHub Copilot, Codex) can read and edit them directly — no screenshots, no GUI walkthroughs, no copy-paste. Your forms live in your codebase: version-controlled, automatically deployed, and free from database migration issues.
+
+Even if you don't write PHP yourself, AI agents can handle the schema for you — just describe what you want in plain language and get back working code.
 
 = Why code-first? =
 
-* **AI-ready by design** — Forms defined as PHP arrays are the lowest-cost input for AI agents. Ask Claude or Copilot to "add a phone number field" and get back a diff-ready code change instantly. No screenshots needed, no GUI explanation required. Ships with `llms.txt`, `ai-reference.md`, and `CLAUDE.md` for agentic coding tools
+* **AI-ready by design** — Forms defined as PHP arrays are the lowest-cost input for AI agents. Ask Claude, Copilot, Cursor, or Codex to "add a phone number field" and get back a diff-ready code change instantly. No screenshots needed, no GUI explanation required. You don't even need to write PHP yourself — AI agents can build and maintain your forms from plain-language instructions. Ships with `llms.txt`, `ai-reference.md`, and `CLAUDE.md` for agentic coding tools
 * **Git history for free** — Every change to your form shows up in `git diff`
 * **Deploy without fear** — Forms are code, so they deploy with your theme. No more "the form disappeared on production"
 * **Dynamic options** — Pull select options from `get_posts()`, taxonomies, or any PHP source. No manual updates
@@ -134,9 +136,11 @@ Or use HXFE as a standalone plugin with `glob()` auto-loading.
 
 [htmx](https://htmx.org/) is a lightweight JavaScript library that lets you add AJAX behavior using HTML attributes — no build step, no npm, no React required. HXFE uses htmx to handle the form's input → confirm → complete flow without page reloads. Since htmx works with server-rendered HTML (which WordPress and PHP are great at), it fits naturally into a WordPress plugin.
 
-= Can I use HXFE with AI coding tools like Claude, Cursor, or GitHub Copilot? =
+= Can I use HXFE with AI coding tools like Claude, Cursor, GitHub Copilot, or Codex? =
 
 Yes — this is one of HXFE's strengths. Because forms are defined as PHP arrays, AI tools can read and edit them directly. HXFE ships with `llms.txt` and `ai-reference.md` that AI agents can reference to understand the schema format. Just ask your AI assistant to "add a phone number field to the contact schema" and it will return a precise code change — no screenshots or GUI interaction needed.
+
+You don't need to write PHP yourself. AI agents like Claude, Codex, or Cursor can generate and maintain the entire schema from plain-language instructions.
 
 = Is HXFE secure? =
 
@@ -219,11 +223,6 @@ reCAPTCHA is **disabled by default**. It is only active when a site administrato
 * Google Privacy Policy: https://policies.google.com/privacy
 
 == Changelog ==
-
-= 1.4.1 =
-* Updated: htmx updated from 1.9.12 to 2.0.10
-* Changed: htmx script handle renamed from 'hxfe-htmx' to 'hx-htmx' for cross-plugin compatibility (HX series shared handle)
-* Improved: Added duplicate registration check via wp_script_is() to prevent loading htmx multiple times
 
 = 1.4.0 =
 * Added: Error logging system — SMTP, Webhook, and reCAPTCHA errors are now logged to `wp-content/hxfe-logs/`

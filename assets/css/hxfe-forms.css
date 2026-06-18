@@ -1,5 +1,5 @@
 /*
- * htmx Form Engine — Base Stylesheet
+ * HXFE — Code-First Forms: Base Stylesheet
  * Clean, minimal, theme-friendly. Override freely in your theme.
  * Design tokens use CSS custom properties for easy customization.
  */
@@ -19,11 +19,13 @@
 	--hxfe-color-text-muted:   #64748b;
 	--hxfe-color-text-label:   #334155;
 	--hxfe-radius-sm:          4px;
-	--hxfe-radius-md:          6px;
-	--hxfe-radius-lg:          8px;
+	--hxfe-radius-md:          8px;
+	--hxfe-radius-lg:          12px;
 	--hxfe-font-size-sm:       0.8125rem;
 	--hxfe-font-size-base:     0.9375rem;
 	--hxfe-spacing-field:      1.5rem;
+	--hxfe-shadow-sm:          0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+	--hxfe-shadow-md:          0 4px 12px rgba(0,0,0,.08), 0 1px 3px rgba(0,0,0,.04);
 
 	max-width: 640px;
 	font-size: var(--hxfe-font-size-base);
@@ -40,9 +42,9 @@
 .hxfe-label {
 	display: block;
 	font-size: var(--hxfe-font-size-sm);
-	font-weight: 500;
+	font-weight: 600;
 	color: var(--hxfe-color-text-label);
-	margin-bottom: .45rem;
+	margin-bottom: .5rem;
 	letter-spacing: .01em;
 }
 
@@ -55,8 +57,8 @@
 .hxfe-textarea,
 .hxfe-select {
 	width: 100%;
-	padding: .625rem .875rem;
-	border: 1px solid var(--hxfe-color-border);
+	padding: .6875rem 1rem;
+	border: 1.5px solid var(--hxfe-color-border);
 	border-radius: var(--hxfe-radius-md);
 	font-size: var(--hxfe-font-size-base);
 	font-family: inherit;
@@ -64,6 +66,7 @@
 	background: var(--hxfe-color-bg);
 	transition: border-color .15s, box-shadow .15s;
 	box-sizing: border-box;
+	box-shadow: var(--hxfe-shadow-sm);
 }
 
 .hxfe-input::placeholder,
@@ -76,12 +79,12 @@
 .hxfe-select:focus {
 	outline: none;
 	border-color: var(--hxfe-color-border-focus);
-	box-shadow: 0 0 0 3px rgba(37, 99, 235, .1);
+	box-shadow: 0 0 0 3px rgba(37, 99, 235, .12);
 }
 
 .hxfe-textarea {
 	resize: vertical;
-	min-height: 120px;
+	min-height: 128px;
 	line-height: 1.6;
 }
 
@@ -94,21 +97,21 @@
 .hxfe-field--error .hxfe-input:focus,
 .hxfe-field--error .hxfe-textarea:focus,
 .hxfe-field--error .hxfe-select:focus {
-	box-shadow: 0 0 0 3px rgba(220, 38, 38, .1);
+	box-shadow: 0 0 0 3px rgba(220, 38, 38, .12);
 }
 
 .hxfe-error-msg {
 	display: block;
 	color: var(--hxfe-color-error);
 	font-size: var(--hxfe-font-size-sm);
-	margin-top: .35rem;
+	margin-top: .4rem;
 }
 
 .hxfe-error-summary {
 	background: #fef2f2;
-	border: 1px solid #fecaca;
+	border: 1.5px solid #fecaca;
 	border-radius: var(--hxfe-radius-md);
-	padding: .75rem 1rem;
+	padding: .875rem 1.125rem;
 	color: #991b1b;
 	margin-bottom: 1.25rem;
 	font-size: var(--hxfe-font-size-sm);
@@ -127,7 +130,7 @@
 .hxfe-checkbox-label {
 	display: flex;
 	align-items: flex-start;
-	gap: .6rem;
+	gap: .65rem;
 	cursor: pointer;
 	font-size: var(--hxfe-font-size-base);
 	font-weight: normal;
@@ -145,13 +148,13 @@
 .hxfe-radio-group {
 	display: flex;
 	flex-direction: column;
-	gap: .6rem;
+	gap: .65rem;
 }
 
 .hxfe-radio-label {
 	display: flex;
 	align-items: center;
-	gap: .6rem;
+	gap: .65rem;
 	cursor: pointer;
 	font-size: var(--hxfe-font-size-base);
 	font-weight: normal;
@@ -164,13 +167,13 @@
 .hxfe-checkbox-group {
 	display: flex;
 	flex-direction: column;
-	gap: .6rem;
+	gap: .65rem;
 }
 
 .hxfe-checkbox-group-label {
 	display: flex;
 	align-items: center;
-	gap: .6rem;
+	gap: .65rem;
 	cursor: pointer;
 	font-size: var(--hxfe-font-size-base);
 	font-weight: normal;
@@ -186,7 +189,7 @@
 .hxfe-field--radio legend,
 .hxfe-field--checkbox-group legend {
 	font-size: var(--hxfe-font-size-sm);
-	font-weight: 500;
+	font-weight: 600;
 	color: var(--hxfe-color-text-label);
 	margin-bottom: .5rem;
 	letter-spacing: .01em;
@@ -204,7 +207,7 @@
 	font-size: var(--hxfe-font-size-sm);
 	color: var(--hxfe-color-text-muted);
 	display: block;
-	margin-top: .3rem;
+	margin-top: .35rem;
 }
 
 /* =============================================
@@ -214,21 +217,21 @@
 	display: flex;
 	align-items: center;
 	gap: .75rem;
-	margin-top: 1.75rem;
+	margin-top: 2rem;
 }
 
 .hxfe-btn {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	padding: .625rem 1.5rem;
+	padding: .75rem 1.75rem;
 	border-radius: var(--hxfe-radius-md);
 	font-size: var(--hxfe-font-size-base);
 	font-family: inherit;
-	font-weight: 500;
+	font-weight: 600;
 	cursor: pointer;
-	border: 1px solid transparent;
-	transition: background .15s, border-color .15s, color .15s;
+	border: 1.5px solid transparent;
+	transition: background .15s, border-color .15s, color .15s, box-shadow .15s, transform .1s;
 	white-space: nowrap;
 	line-height: 1.5;
 }
@@ -237,16 +240,25 @@
 	background: var(--hxfe-color-primary);
 	color: #fff;
 	border-color: var(--hxfe-color-primary);
+	box-shadow: 0 1px 3px rgba(37,99,235,.3);
 }
 
 .hxfe-btn-submit:hover {
 	background: var(--hxfe-color-primary-dark);
 	border-color: var(--hxfe-color-primary-dark);
+	box-shadow: 0 4px 12px rgba(37,99,235,.3);
+	transform: translateY(-1px);
+}
+
+.hxfe-btn-submit:active {
+	transform: translateY(0);
 }
 
 .hxfe-btn-submit:disabled {
-	opacity: .6;
+	opacity: .55;
 	cursor: not-allowed;
+	transform: none;
+	box-shadow: none;
 }
 
 .hxfe-btn-back {
@@ -258,6 +270,7 @@
 .hxfe-btn-back:hover {
 	background: var(--hxfe-color-bg-subtle);
 	color: var(--hxfe-color-text);
+	border-color: #cbd5e1;
 }
 
 /* =============================================
@@ -267,8 +280,8 @@
 	display: inline-block;
 	width: 16px;
 	height: 16px;
-	border: 2px solid var(--hxfe-color-border);
-	border-top-color: var(--hxfe-color-primary);
+	border: 2px solid rgba(255,255,255,.35);
+	border-top-color: #fff;
 	border-radius: 50%;
 	animation: hxfe-spin .7s linear infinite;
 	opacity: 0;
@@ -296,24 +309,25 @@
 }
 
 .hxfe-confirm-list {
-	border: 1px solid var(--hxfe-color-border);
+	border: 1.5px solid var(--hxfe-color-border);
 	border-radius: var(--hxfe-radius-lg);
 	overflow: hidden;
 	margin-bottom: 1.75rem;
+	box-shadow: var(--hxfe-shadow-sm);
 }
 
 .hxfe-confirm-list dt,
 .hxfe-confirm-list dd {
-	padding: .75rem 1.125rem;
+	padding: .75rem 1.25rem;
 	margin: 0;
 }
 
 .hxfe-confirm-list dt {
 	background: var(--hxfe-color-bg-subtle);
 	font-size: var(--hxfe-font-size-sm);
-	font-weight: 500;
+	font-weight: 600;
 	color: var(--hxfe-color-text-muted);
-	border-bottom: 1px solid var(--hxfe-color-border);
+	border-bottom: 1.5px solid var(--hxfe-color-border);
 }
 
 .hxfe-confirm-list dd {
@@ -333,19 +347,21 @@
    Complete screen
    ============================================= */
 .hxfe-complete {
-	border: 1px solid #86efac;
+	border: 1.5px solid #86efac;
 	border-radius: var(--hxfe-radius-lg);
 	padding: 1.5rem 1.75rem;
 	color: #166534;
 	font-size: var(--hxfe-font-size-base);
 	line-height: 1.7;
 	background: #f0fdf4;
+	box-shadow: var(--hxfe-shadow-sm);
 }
 
 .hxfe-complete--custom {
 	padding: 0;
 	background: none;
 	border: none;
+	box-shadow: none;
 }
 
 .hxfe-complete--redirect {
@@ -386,7 +402,7 @@
 	top: 13px;
 	left: 50%;
 	right: -50%;
-	height: 1px;
+	height: 2px;
 	background: var(--hxfe-color-border);
 	z-index: 0;
 }
@@ -405,18 +421,19 @@
 	align-items: center;
 	justify-content: center;
 	font-size: .7rem;
-	font-weight: 600;
+	font-weight: 700;
 	background: #e2e8f0;
 	color: #94a3b8;
 	margin-bottom: .4rem;
 	position: relative;
 	z-index: 1;
-	transition: background .2s, color .2s;
+	transition: background .2s, color .2s, box-shadow .2s;
 }
 
 .hxfe-progress-label.current .hxfe-step-num {
 	background: var(--hxfe-color-primary);
 	color: #fff;
+	box-shadow: 0 0 0 3px rgba(37,99,235,.2);
 }
 
 .hxfe-progress-label.done .hxfe-step-check {
@@ -436,7 +453,7 @@
 
 .hxfe-progress-label.current .hxfe-step-text {
 	color: var(--hxfe-color-primary);
-	font-weight: 500;
+	font-weight: 600;
 }
 
 .hxfe-progress-label.done .hxfe-step-text {
@@ -444,7 +461,7 @@
 }
 
 .hxfe-progress-bar-track {
-	height: 3px;
+	height: 4px;
 	background: #e2e8f0;
 	border-radius: 2px;
 	overflow: hidden;
@@ -453,7 +470,7 @@
 
 .hxfe-progress-bar-fill {
 	height: 100%;
-	background: var(--hxfe-color-primary);
+	background: linear-gradient(90deg, var(--hxfe-color-primary), #60a5fa);
 	border-radius: 2px;
 	transition: width .4s ease;
 }
@@ -469,7 +486,7 @@
 	display: flex;
 	align-items: center;
 	gap: .75rem;
-	margin-top: 1.75rem;
+	margin-top: 2rem;
 }
 
 /* =============================================
@@ -484,15 +501,15 @@
    ============================================= */
 .hxfe-chatbot-wrap {
 	max-width: 100%;
-	border: 1px solid var(--hxfe-color-border);
+	border: 1.5px solid var(--hxfe-color-border);
 	border-radius: var(--hxfe-radius-lg);
 	overflow: hidden;
 	display: flex;
 	flex-direction: column;
 	font-size: 14px;
+	box-shadow: var(--hxfe-shadow-md);
 }
 
-/* ヘッダー（bot_nameがある場合） */
 .hxfe-chatbot-header {
 	display: flex;
 	align-items: center;
@@ -503,20 +520,21 @@
 }
 
 .hxfe-chatbot-header-avatar {
-	width: 32px;
-	height: 32px;
+	width: 34px;
+	height: 34px;
 	border-radius: 50%;
-	background: #e8f0fe;
+	background: #eff6ff;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	font-size: 18px;
 	flex-shrink: 0;
+	box-shadow: 0 0 0 2px #dbeafe;
 }
 
 .hxfe-chatbot-header-name {
 	font-size: 13.5px;
-	font-weight: 500;
+	font-weight: 600;
 	color: var(--hxfe-color-text);
 }
 
@@ -536,7 +554,6 @@
 	background: #f7f8fc;
 }
 
-/* 日付区切り */
 .hxfe-chatbot-divider {
 	display: flex;
 	align-items: center;
@@ -568,13 +585,14 @@
 	width: 28px;
 	height: 28px;
 	border-radius: 50%;
-	background: #e8f0fe;
+	background: #eff6ff;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	font-size: 15px;
 	flex-shrink: 0;
 	margin-bottom: 18px;
+	box-shadow: 0 0 0 2px #dbeafe;
 }
 
 .hxfe-chatbot-avatar-img {
@@ -610,13 +628,14 @@
 	border: 1px solid var(--hxfe-color-border);
 	border-radius: 16px 16px 16px 4px;
 	color: var(--hxfe-color-text);
-	box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	box-shadow: 0 1px 3px rgba(0,0,0,.06);
 }
 
 .hxfe-chatbot-bubble--user {
 	background: var(--hxfe-color-primary);
 	color: #fff;
 	border-radius: 16px 16px 4px 16px;
+	box-shadow: 0 1px 3px rgba(37,99,235,.25);
 }
 
 .hxfe-chatbot-bubble--error {
@@ -633,7 +652,6 @@
 	border-radius: 10px;
 }
 
-/* タイムスタンプ */
 .hxfe-chatbot-time {
 	font-size: 10.5px;
 	color: var(--hxfe-color-text-muted);
@@ -646,15 +664,14 @@
 }
 
 .hxfe-chatbot-typing {
-	display: flex;
+	display: inline-flex;
 	align-items: center;
 	gap: 4px;
 	padding: 10px 13px;
 	background: #fff;
 	border: 1px solid var(--hxfe-color-border);
 	border-radius: 16px 16px 16px 4px;
-	box-shadow: 0 1px 2px rgba(0,0,0,.05);
-	display: inline-flex;
+	box-shadow: 0 1px 3px rgba(0,0,0,.06);
 }
 
 .hxfe-chatbot-dot {
@@ -689,7 +706,7 @@
 .hxfe-chatbot-textarea {
 	flex: 1;
 	min-width: 0;
-	border: 1px solid var(--hxfe-color-border);
+	border: 1.5px solid var(--hxfe-color-border);
 	border-radius: 22px;
 	padding: 9px 16px;
 	font-size: 13.5px;
@@ -699,14 +716,14 @@
 	line-height: 1.5;
 	color: var(--hxfe-color-text);
 	background: #f7f8fc;
-	transition: border-color .15s, background .15s;
+	transition: border-color .15s, background .15s, box-shadow .15s;
 }
 
 .hxfe-chatbot-input:focus,
 .hxfe-chatbot-textarea:focus {
 	border-color: var(--hxfe-color-primary);
 	background: var(--hxfe-color-bg);
-	box-shadow: 0 0 0 3px rgba(37,99,235,.08);
+	box-shadow: 0 0 0 3px rgba(37,99,235,.1);
 }
 
 .hxfe-chatbot-textarea {
@@ -726,12 +743,14 @@
 	align-items: center;
 	justify-content: center;
 	flex-shrink: 0;
-	transition: background .15s, transform .1s;
+	transition: background .15s, transform .1s, box-shadow .15s;
+	box-shadow: 0 1px 3px rgba(37,99,235,.3);
 }
 
 .hxfe-chatbot-send-btn:hover {
 	background: var(--hxfe-color-primary-dark);
 	transform: scale(1.05);
+	box-shadow: 0 4px 10px rgba(37,99,235,.35);
 }
 
 .hxfe-chatbot-send-btn:active {
@@ -747,7 +766,7 @@
 	flex-shrink: 0;
 }
 
-.hxfe-chatbot-send-btn:disabled { background: #cbd5e1; cursor: not-allowed; transform: none; }
+.hxfe-chatbot-send-btn:disabled { background: #cbd5e1; cursor: not-allowed; transform: none; box-shadow: none; }
 .hxfe-chatbot-send-btn .hxfe-send-label { display: none; }
 
 .hxfe-chatbot-choices {
@@ -755,25 +774,26 @@
 	flex-wrap: wrap;
 	gap: 6px;
 	padding-left: 36px;
-	margin-top: 4px;
+	margin-top: 6px;
 }
 
 .hxfe-chatbot-choice-btn {
 	background: #fff;
-	border: 1px solid var(--hxfe-color-primary);
+	border: 1.5px solid var(--hxfe-color-primary);
 	color: var(--hxfe-color-primary);
 	border-radius: 20px;
 	padding: 5px 15px;
 	font-size: 13px;
 	font-family: inherit;
 	cursor: pointer;
-	transition: background .12s, color .12s, transform .1s;
+	transition: background .12s, color .12s, transform .1s, box-shadow .12s;
 }
 
 .hxfe-chatbot-choice-btn:hover {
 	background: var(--hxfe-color-primary);
 	color: #fff;
 	transform: translateY(-1px);
+	box-shadow: 0 3px 8px rgba(37,99,235,.25);
 }
 
 .hxfe-chatbot-choice-btn.is-selected {
@@ -796,7 +816,7 @@
 }
 
 /* =============================================
-   Fade-in on swap (JS adds class)
+   Fade-in on swap
    ============================================= */
 .hxfe-wrap--fadein {
 	animation: hxfe-fadein 0.25s ease;
@@ -812,7 +832,6 @@
    ============================================= */
 @media (max-width: 768px) {
 
-	/* ボタンを縦並びに */
 	.hxfe-actions,
 	.hxfe-step-actions {
 		flex-direction: column-reverse;
@@ -822,25 +841,22 @@
 	.hxfe-btn {
 		width: 100%;
 		justify-content: center;
-		padding: .75rem 1rem;
+		padding: .8125rem 1rem;
 	}
 
-	/* ステッパーのラベルテキストを非表示 */
 	.hxfe-step-text {
 		display: none;
 	}
 
-	/* ステップ数カウンターを目立たせる */
 	.hxfe-progress-counter {
 		font-size: .8125rem;
 		text-align: center;
 		margin-bottom: .5rem;
 	}
 
-	/* 確認画面のdt/ddを縦並びに */
 	.hxfe-confirm-list dt,
 	.hxfe-confirm-list dd {
-		padding: .6rem .875rem;
+		padding: .625rem 1rem;
 	}
 
 	.hxfe-confirm-list dt {
@@ -853,32 +869,30 @@
 		padding-bottom: .75rem;
 	}
 
-	/* chatbotの最大高さを抑える */
 	.hxfe-chatbot-log {
 		max-height: 300px;
 	}
 
-	/* chatbotバブルの最大幅を広げる */
 	.hxfe-chatbot-bubble {
 		max-width: 88%;
 	}
 }
-
 
 /* =============================================
    Auth / Login screen
    ============================================= */
 .hxfe-auth-wrap {
 	max-width: 360px;
-	background: #fff;
-	border: 1px solid var(--hxfe-color-border);
+	background: var(--hxfe-color-bg);
+	border: 1.5px solid var(--hxfe-color-border);
 	border-radius: var(--hxfe-radius-lg);
 	padding: 2rem;
+	box-shadow: var(--hxfe-shadow-md);
 }
 
 .hxfe-auth-title {
 	font-size: 1.0625rem;
-	font-weight: 600;
+	font-weight: 700;
 	color: var(--hxfe-color-text);
 	margin-bottom: 1.5rem;
 }
@@ -903,7 +917,7 @@
 }
 
 /* =============================================
-   Download button (complete_mode: download)
+   Download button
    ============================================= */
 .hxfe-download-wrap {
 	margin-top: 1.25rem;
@@ -917,27 +931,31 @@
 	color: #fff;
 	border: none;
 	border-radius: var(--hxfe-radius-md);
-	padding: .625rem 1.5rem;
+	padding: .75rem 1.75rem;
 	font-size: var(--hxfe-font-size-base);
-	font-weight: 500;
+	font-weight: 600;
 	text-decoration: none;
 	cursor: pointer;
-	transition: background .15s;
+	transition: background .15s, box-shadow .15s, transform .1s;
+	box-shadow: 0 1px 3px rgba(37,99,235,.3);
 }
 
 .hxfe-btn-download:hover {
 	background: var(--hxfe-color-primary-dark);
 	color: #fff;
+	box-shadow: 0 4px 12px rgba(37,99,235,.3);
+	transform: translateY(-1px);
 }
 
 /* =============================================
-   Availability notice (available_from/until)
+   Availability notice
    ============================================= */
 .hxfe-availability-notice {
 	padding: 1rem 1.25rem;
-	border: 1px solid var(--hxfe-color-border);
+	border: 1.5px solid var(--hxfe-color-border);
 	border-radius: var(--hxfe-radius-md);
 	color: var(--hxfe-color-text-muted);
 	font-size: var(--hxfe-font-size-base);
 	line-height: 1.7;
+	background: var(--hxfe-color-bg-subtle);
 }

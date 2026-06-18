@@ -21,6 +21,7 @@ Even if you don't write PHP yourself, AI agents can handle the schema for you �
 = Why code-first? =
 
 * **AI-ready by design** — Forms defined as PHP arrays are the lowest-cost input for AI agents. Ask Claude, Copilot, Cursor, or Codex to "add a phone number field" and get back a diff-ready code change instantly. No screenshots needed, no GUI explanation required. You don't even need to write PHP yourself — AI agents can build and maintain your forms from plain-language instructions. Ships with `llms.txt`, `ai-reference.md`, and `CLAUDE.md` for agentic coding tools
+* **Fully customizable** — All styles use CSS custom properties (design tokens). Ships with `DESIGN.md` for a complete variable reference and customization examples.
 * **Git history for free** — Every change to your form shows up in `git diff`
 * **Deploy without fear** — Forms are code, so they deploy with your theme. No more "the form disappeared on production"
 * **Dynamic options** — Pull select options from `get_posts()`, taxonomies, or any PHP source. No manual updates

@@ -108,11 +108,16 @@ add_filter( 'hxfe_schemas', function( $schemas ) {
 - Zero cookies for form state — GDPR compliant by design
 - CSS custom properties (design tokens) for easy theme integration
 - Responsive out of the box (≤768px breakpoint)
-- Current version: 1.4.1
+- Current version: 1.4.2
 
 ---
 
 ## Version history (latest first)
+
+### v1.4.2
+- Added: SECURITY.md — security policy, vulnerability reporting, disclosure timeline
+- Added: MAINTENANCE.md — architecture overview, htmx update steps, fork guide
+- Docs: Updated ai-reference.md — design philosophy and maintainability section for AI agents
 
 ### v1.4.1
 - Updated: htmx 1.9.12 → 2.0.10

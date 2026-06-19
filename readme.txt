@@ -4,7 +4,7 @@ Tags: contact form, form builder, htmx, chatbot, ajax
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -224,6 +224,16 @@ reCAPTCHA is **disabled by default**. It is only active when a site administrato
 * Google Privacy Policy: https://policies.google.com/privacy
 
 == Changelog ==
+
+= 1.4.2 =
+* Added: SECURITY.md — security policy, vulnerability reporting, and disclosure timeline
+* Added: MAINTENANCE.md — architecture overview, htmx update steps, and fork guide
+* Docs: Updated ai-reference.md — added design philosophy and maintainability section for AI agents
+
+= 1.4.1 =
+* Updated: htmx 1.9.12 → 2.0.10
+* Changed: htmx script handle renamed to 'hx-htmx' (HX series shared handle)
+* Improved: Added wp_script_is() check to prevent duplicate htmx loading
 
 = 1.4.0 =
 * Added: Error logging system — SMTP, Webhook, and reCAPTCHA errors are now logged to `wp-content/hxfe-logs/`

@@ -324,7 +324,7 @@ function hxfe_handle_test_mail() {
 	$to     = sanitize_email( wp_unslash( $_POST['test_email'] ?? '' ) );
 	$result = hxfe_send_test_mail( $to );
 	$status = $result['ok'] ? 'ok' : 'fail';
-	$msg    = urlencode( $result['message'] );
+	$msg    = $result['message'];
 
 	wp_safe_redirect( add_query_arg( [
 		'page'       => 'hxfe-settings',
@@ -341,7 +341,7 @@ function hxfe_handle_test_mail() {
 function hxfe_render_smtp_settings() {
 	$s          = hxfe_get_smtp_settings();
 	$test_mail  = sanitize_key( wp_unslash( $_GET['test_mail'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	$test_msg   = sanitize_text_field( urldecode( wp_unslash( $_GET['test_msg'] ?? '' ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$test_msg   = sanitize_text_field( wp_unslash( $_GET['test_msg'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 	// プロバイダープリセット
 	$presets = [

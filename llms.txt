@@ -108,7 +108,7 @@ add_filter( 'hxfe_schemas', function( $schemas ) {
 - Zero cookies for form state — GDPR compliant by design
 - CSS custom properties (design tokens) for easy theme integration
 - Responsive out of the box (≤768px breakpoint)
-- Current version: 1.4.2
+- Current version: 1.4.3
 
 ---
 

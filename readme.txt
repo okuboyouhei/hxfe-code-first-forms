@@ -4,11 +4,11 @@ Tags: contact form, form builder, htmx, chatbot, ajax
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.4.2
+Stable tag: 1.4.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Define forms as PHP arrays. AI-ready, Git-managed, zero database — contact forms, step forms, chatbots, and surveys from one schema. Powered by htmx — no page reloads.
+Define forms as PHP arrays. AI-ready, Git-managed, zero database — contact forms, step forms, chatbots, and surveys. Powered by htmx.
 
 == Description ==
 
@@ -224,6 +224,11 @@ reCAPTCHA is **disabled by default**. It is only active when a site administrato
 * Google Privacy Policy: https://policies.google.com/privacy
 
 == Changelog ==
+
+= 1.4.3 =
+* Fixed: Resolved double URL-encoding of the SMTP test result message (removed redundant urlencode/urldecode)
+* Fixed: Sanitize $_GET['test_msg'] before use in the settings page
+* Fixed: Shortened Short Description to under 150 characters
 
 = 1.4.2 =
 * Added: SECURITY.md — security policy, vulnerability reporting, and disclosure timeline

@@ -2,10 +2,7 @@
 
 **Define WordPress forms as PHP arrays. AI-ready, Git-managed, zero database.**
 
-[![WordPress Plugin Version](https://img.shields.io/badge/version-1.4.0-blue)](https://wordpress.org/plugins/hxfe-code-first-forms/)
-[![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-blue)](https://wordpress.org)
-[![PHP](https://img.shields.io/badge/PHP-7.4%2B-purple)](https://php.net)
-[![License](https://img.shields.io/badge/license-GPL--2.0%2B-green)](https://www.gnu.org/licenses/gpl-2.0.html)
+[![WordPress Plugin Version](https://img.shields.io/badge/version-1.4.3-blue)](https://wordpress.org/plugins/hxfe-code-first-forms/) [![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-blue)](https://wordpress.org) [![PHP](https://img.shields.io/badge/PHP-7.4%2B-purple)](https://php.net) [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green)](https://www.gnu.org/licenses/gpl-2.0.html)
 
 [WordPress.org](https://wordpress.org/plugins/hxfe-code-first-forms/) · [Documentation](https://wordpress.org/plugins/hxfe-code-first-forms/) · [Report Issue](https://github.com/okuboyouhei/hxfe-code-first-forms/issues)
 
@@ -50,13 +47,13 @@ That's it. Your form is now Git-managed, deploy-safe, and AI-friendly.
 
 ## Why code-first?
 
-| Problem with GUI builders | HXFE solution |
-|---|---|
-| AI can't edit forms directly | Forms are PHP arrays — AI reads and writes them natively |
-| Forms stored in database | Forms live in your codebase |
-| Can't track changes in Git | Every change shows in `git diff` |
-| Forms disappear after deploy | Forms deploy with your theme |
-| Hard to generate dynamic options | Just use PHP — `get_posts()`, taxonomies, etc. |
+| Problem with GUI builders        | HXFE solution                                            |
+| -------------------------------- | -------------------------------------------------------- |
+| AI can't edit forms directly     | Forms are PHP arrays — AI reads and writes them natively |
+| Forms stored in database         | Forms live in your codebase                              |
+| Can't track changes in Git       | Every change shows in `git diff`                         |
+| Forms disappear after deploy     | Forms deploy with your theme                             |
+| Hard to generate dynamic options | Just use PHP — `get_posts()`, taxonomies, etc.           |
 
 ---
 
@@ -149,46 +146,46 @@ add_filter( 'hxfe_schemas', function( $schemas ) {
 
 ### Key schema keys
 
-| Key | Type | Description |
-|---|---|---|
-| `id` | string | **Required.** Form ID (alphanumeric + hyphens) |
-| `to` | string | Recipient email. Empty = no email sent (diagnosis mode) |
-| `to_rules` | array | Dynamic routing: `[['when'=>[...],'to'=>'...']]` |
-| `subject` | string | Email subject. Supports `{field_key}` interpolation |
-| `fields` | array | **Required.** Array of field definitions |
-| `step_mode` | string | `'chatbot'` or `'one_by_one'` |
-| `bot_name` | string | Chatbot display name (chatbot mode) |
-| `bot_icon` | string | Emoji or image URL (chatbot mode) |
-| `greeting` | string | Chatbot opening message (chatbot mode) |
-| `complete_message` | string | Completion message. Supports `{field_key}` |
-| `complete_html` | string | Custom HTML on completion screen |
-| `complete_html_rules` | array | Conditional HTML: `[['when'=>[...],'html'=>'...']]` |
-| `complete_redirect` | string | Redirect URL after submission |
-| `confirm` | bool | Show confirmation screen (default: true) |
-| `webhooks` | array | Webhook definitions |
-| `steps` | array | Step form: `[['label'=>'...','fields'=>['key1','key2']]]` |
+| Key                   | Type   | Description                                               |
+| --------------------- | ------ | --------------------------------------------------------- |
+| `id`                  | string | **Required.** Form ID (alphanumeric + hyphens)            |
+| `to`                  | string | Recipient email. Empty = no email sent (diagnosis mode)   |
+| `to_rules`            | array  | Dynamic routing: `[['when'=>[...],'to'=>'...']]`          |
+| `subject`             | string | Email subject. Supports `{field_key}` interpolation       |
+| `fields`              | array  | **Required.** Array of field definitions                  |
+| `step_mode`           | string | `'chatbot'` or `'one_by_one'`                             |
+| `bot_name`            | string | Chatbot display name (chatbot mode)                       |
+| `bot_icon`            | string | Emoji or image URL (chatbot mode)                         |
+| `greeting`            | string | Chatbot opening message (chatbot mode)                    |
+| `complete_message`    | string | Completion message. Supports `{field_key}`                |
+| `complete_html`       | string | Custom HTML on completion screen                          |
+| `complete_html_rules` | array  | Conditional HTML: `[['when'=>[...],'html'=>'...']]`       |
+| `complete_redirect`   | string | Redirect URL after submission                             |
+| `confirm`             | bool   | Show confirmation screen (default: true)                  |
+| `webhooks`            | array  | Webhook definitions                                       |
+| `steps`               | array  | Step form: `[['label'=>'...','fields'=>['key1','key2']]]` |
 
 ---
 
 ### Key field keys
 
-| Key | Type | Description |
-|---|---|---|
-| `key` | string | **Required.** Unique field identifier |
-| `type` | string | **Required.** Field type |
-| `label` | string | Field label |
-| `required` | bool | Validation: required |
-| `placeholder` | string | Input placeholder |
-| `options` | array | For select/radio/checkbox_group: `[['value'=>'...','label'=>'...']]` |
-| `bot_message` | string | **Required in chatbot mode.** Question text |
-| `show_if` | array | Conditional display: `['field_key', 'operator', 'value']` |
-| `required_if` | array | Conditional required |
-| `skip_if` | array | Skip field if condition met |
-| `before_html` | string | HTML inserted before field |
-| `after_html` | string | HTML inserted after field |
-| `min` / `max` | int | Min/max for number, checkbox_group |
-| `min_date` / `max_date` | string | Min/max date (Y-m-d) |
-| `maxlength` | int | Max character length |
+| Key                     | Type   | Description                                                           |
+| ----------------------- | ------ | --------------------------------------------------------------------- |
+| `key`                   | string | **Required.** Unique field identifier                                 |
+| `type`                  | string | **Required.** Field type                                              |
+| `label`                 | string | Field label                                                           |
+| `required`              | bool   | Validation: required                                                  |
+| `placeholder`           | string | Input placeholder                                                     |
+| `options`               | array  | For select/radio/checkbox\_group: `[['value'=>'...','label'=>'...']]` |
+| `bot_message`           | string | **Required in chatbot mode.** Question text                           |
+| `show_if`               | array  | Conditional display: `['field_key', 'operator', 'value']`             |
+| `required_if`           | array  | Conditional required                                                  |
+| `skip_if`               | array  | Skip field if condition met                                           |
+| `before_html`           | string | HTML inserted before field                                            |
+| `after_html`            | string | HTML inserted after field                                             |
+| `min` / `max`           | int    | Min/max for number, checkbox\_group                                   |
+| `min_date` / `max_date` | string | Min/max date (Y-m-d)                                                  |
+| `maxlength`             | int    | Max character length                                                  |
 
 ---
 
@@ -237,9 +234,7 @@ $schemas['support'] = [
     ],
 ];
 ```
-
 > **Note:** `bot_message` is required for every non-honeypot field in chatbot mode.
-
 ---
 
 ### Diagnosis mode (no email)
@@ -283,23 +278,17 @@ $schemas['quiz'] = [
 
 ## FAQ
 
-**Q: Does HXFE save submissions to the database?**
-No. HXFE sends email only. Use Webhook support to send data to Google Sheets, a CRM, or any external service.
+**Q: Does HXFE save submissions to the database?** No. HXFE sends email only. Use Webhook support to send data to Google Sheets, a CRM, or any external service.
 
-**Q: What is htmx and why does HXFE use it?**
-[htmx](https://htmx.org/) is a lightweight JS library that adds AJAX behavior via HTML attributes — no build step, no npm, no React. HXFE uses it for the input → confirm → complete flow without page reloads. It fits naturally with WordPress's server-rendered PHP.
+**Q: What is htmx and why does HXFE use it?** [htmx](https://htmx.org/) is a lightweight JS library that adds AJAX behavior via HTML attributes — no build step, no npm, no React. HXFE uses it for the input → confirm → complete flow without page reloads. It fits naturally with WordPress's server-rendered PHP.
 
-**Q: Can I use HXFE with AI coding tools?**
-Yes — this is one of HXFE's strengths. Forms defined as PHP arrays can be read and edited directly by AI tools. HXFE ships with `llms.txt` and `ai-reference.md` for AI agents to reference. Ask Claude, Copilot, Cursor, or Codex to "add a phone number field" and get back a diff-ready code change. You don't need to write PHP yourself — AI agents can build and maintain your forms from plain-language instructions.
+**Q: Can I use HXFE with AI coding tools?** Yes — this is one of HXFE's strengths. Forms defined as PHP arrays can be read and edited directly by AI tools. HXFE ships with `llms.txt` and `ai-reference.md` for AI agents to reference. Ask Claude, Copilot, Cursor, or Codex to "add a phone number field" and get back a diff-ready code change. You don't need to write PHP yourself — AI agents can build and maintain your forms from plain-language instructions.
 
-**Q: Is HXFE GDPR compliant?**
-Yes. Zero cookies. Form state is preserved via hidden JSON fields server-side, not browser storage.
+**Q: Is HXFE GDPR compliant?** Yes. Zero cookies. Form state is preserved via hidden JSON fields server-side, not browser storage.
 
-**Q: Can I skip the confirmation screen?**
-Yes. Add `'confirm' => false` to your schema.
+**Q: Can I skip the confirmation screen?** Yes. Add `'confirm' => false` to your schema.
 
-**Q: Can I restrict a form to specific IP addresses or require a password?**
-Yes. Use `allowed_ips` for IP restriction and `auth` for password protection. Both support `wp-config.php` constants to keep sensitive values out of Git.
+**Q: Can I restrict a form to specific IP addresses or require a password?** Yes. Use `allowed_ips` for IP restriction and `auth` for password protection. Both support `wp-config.php` constants to keep sensitive values out of Git.
 
 ---
 
@@ -313,7 +302,7 @@ Yes. Use `allowed_ips` for IP restriction and `auth` for password protection. Bo
 - Uploaded files deleted immediately after email delivery
 - Passed WordPress.org manual security review
 
-Found a vulnerability? Please report it via [GitHub Issues](https://github.com/okuboyouhei/hxfe-code-first-forms/issues) or email directly.
+See [SECURITY.md](https://github.com/okuboyouhei/hxfe-code-first-forms/blob/main/SECURITY.md) for the full policy.
 
 ---
 

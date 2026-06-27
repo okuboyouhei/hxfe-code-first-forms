@@ -4,7 +4,7 @@ Tags: contact form, form builder, htmx, chatbot, ajax
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.4.3
+Stable tag: 1.4.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -224,6 +224,12 @@ reCAPTCHA is **disabled by default**. It is only active when a site administrato
 * Google Privacy Policy: https://policies.google.com/privacy
 
 == Changelog ==
+
+= 1.4.4 =
+* Added: Cloudflare Turnstile field type (`type: 'turnstile'`) — privacy-friendly spam protection as an alternative to reCAPTCHA
+* Added: Turnstile managed mode (auto-verification widget) and invisible mode (no UI, token obtained on submit)
+* Added: Turnstile site key / secret key settings under Settings → HXFE
+* Added: Server-side verification against Cloudflare's siteverify API with fail-closed behavior in production
 
 = 1.4.3 =
 * Fixed: Resolved double URL-encoding of the SMTP test result message (removed redundant urlencode/urldecode)

@@ -88,13 +88,13 @@ add_filter( 'hxfe_schemas', function( $schemas ) {
 
 ## Key features (summary)
 
-- 15 field types: text, email, tel, url, textarea, select, radio, checkbox, checkbox_group, number, date, file, honeypot, reCAPTCHA, privacy
+- 16 field types: text, email, tel, url, textarea, select, radio, checkbox, checkbox_group, number, date, file, honeypot, reCAPTCHA, turnstile, privacy
 - 4 UI modes: normal / step / one-by-one / chatbot
 - Conditional logic: show_if, hide_if (deprecated, use show_if), required_if, skip_if, to_rules, subject_rules, complete_redirect_rules
 - Access control: IP restriction (CIDR supported) + form-level password authentication
 - File upload: attached to email, auto-deleted after send, MIME whitelist, .htaccess protection, confirm-screen support
 - Webhook: Zapier, Make, Slack, any HTTP endpoint
-- Built-in SMTP, reCAPTCHA v2/v3, iframe embedding with CORS
+- Built-in SMTP, reCAPTCHA v2/v3, Cloudflare Turnstile, iframe embedding with CORS
 - Page slug auto-injection: subject gets `[form-id@page-slug]` suffix for per-page tracking (disable_context: true to opt out)
 - Conditional complete HTML: `complete_html_rules` — show different HTML based on answers ({field_key} interpolation supported; omit `to` for diagnosis/no-email mode)
 - chatbot + conditional fields: `show_if` / `required_if` work in chatbot mode
@@ -108,11 +108,20 @@ add_filter( 'hxfe_schemas', function( $schemas ) {
 - Zero cookies for form state — GDPR compliant by design
 - CSS custom properties (design tokens) for easy theme integration
 - Responsive out of the box (≤768px breakpoint)
-- Current version: 1.4.3
+- Current version: 1.4.4
 
 ---
 
 ## Version history (latest first)
+
+### v1.4.4
+- Added: Cloudflare Turnstile field type (`type: 'turnstile'`) — privacy-friendly CAPTCHA, managed and invisible modes
+- Changed: CAPTCHA verification (reCAPTCHA + Turnstile) now runs in the validate handler instead of submit, so the confirm-screen flow verifies tokens correctly
+
+### v1.4.3
+- Fixed: SMTP test email double-encoding
+- Fixed: `$_GET['test_msg']` sanitization
+- Docs: shortened plugin short description
 
 ### v1.4.2
 - Added: SECURITY.md — security policy, vulnerability reporting, disclosure timeline

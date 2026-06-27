@@ -34,6 +34,45 @@ add_action( 'wp_ajax_hxfe_back',            'hxfe_handle_back' );
 add_action( 'wp_ajax_nopriv_hxfe_back',     'hxfe_handle_back' );
 
 /* ---------------------------------------------------------------------------
+ * CAPTCHA 検証（共通）
+ * ------------------------------------------------------------------------- */
+
+/**
+ * スキーマ内の reCAPTCHA / Turnstile フィールドを検証する。
+ *
+ * 入力画面のフォーム送信（validate）時に呼ぶこと。確認画面にはウィジェットが
+ * 存在せずトークンを引き継げないため、submit 時には検証できない。
+ *
+ * nonce は呼び出し元（hxfe_validate_request）で検証済み。
+ *
+ * @param array $schema フォームスキーマ。
+ * @return array<string,string> フィールドキー => エラーメッセージ。空配列なら検証成功。
+ */
+function hxfe_verify_captcha_fields( array $schema ): array {
+	$errors = [];
+
+	foreach ( $schema['fields'] as $field ) {
+		$type = $field['type'] ?? '';
+
+		if ( 'recaptcha' === $type ) {
+			$token  = sanitize_text_field( wp_unslash( $_POST['hxfe_recaptcha_token'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- nonce verified by hxfe_validate_request()
+			$result = hxfe_validate_recaptcha( $field, $token );
+			if ( '' !== $result['error'] ) {
+				$errors[ $field['key'] ] = $result['error'];
+			}
+		} elseif ( 'turnstile' === $type ) {
+			$token  = sanitize_text_field( wp_unslash( $_POST['cf-turnstile-response'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- nonce verified by hxfe_validate_request()
+			$result = hxfe_validate_turnstile( $field, $token );
+			if ( '' !== $result['error'] ) {
+				$errors[ $field['key'] ] = $result['error'];
+			}
+		}
+	}
+
+	return $errors;
+}
+
+/* ---------------------------------------------------------------------------
  * Shared gate
  * ------------------------------------------------------------------------- */
 
@@ -141,6 +180,13 @@ function hxfe_handle_validate() {
 		wp_die();
 	}
 
+	// CAPTCHA検証（入力画面のフォームにウィジェット/トークンが存在するこのタイミングで実施）。
+	// 確認画面にはウィジェットが無くトークンを引き継げないため、submitではなくvalidateで検証する。
+	$captcha_errors = hxfe_verify_captcha_fields( $schema );
+	foreach ( $captcha_errors as $key => $msg ) {
+		$errors[ $key ] = $msg;
+	}
+
 	if ( ! empty( $errors ) ) {
 		echo hxfe_render_input( $schema, $errors, $values ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		wp_die();
@@ -178,18 +224,9 @@ function hxfe_handle_submit() {
 		wp_die( '', '', 400 );
 	}
 
-	// reCAPTCHA 検証 (フォームに recaptcha フィールドがある場合)
-	foreach ( $schema['fields'] as $rcfield ) {
-		if ( ( $rcfield['type'] ?? '' ) !== 'recaptcha' ) { continue; }
-		$token  = sanitize_text_field( wp_unslash( $_POST['hxfe_recaptcha_token'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- nonce verified above
-		$result = hxfe_validate_recaptcha( $rcfield, $token );
-		if ( '' !== $result['error'] ) {
-			$errors = [ $rcfield['key'] => $result['error'] ];
-			echo hxfe_render_input( $schema, $errors, $values ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			wp_die();
-		}
-		break;
-	}
+	// CAPTCHA検証は validate ハンドラ（入力画面→確認画面の手前）で実施済み。
+	// 確認画面にはCAPTCHAウィジェットが存在せずトークンを引き継げないため、
+	// ここ（submit）では検証しない。
 
 	// json_decode 後の値を hxfe_process_fields() でサニタイズ＋バリデーションする。
 	// sanitize_text_field() 等はべき等なため、confirm 画面経由の値を再サニタイズしても値は変わらない。

@@ -206,6 +206,47 @@ function hxfe_render_settings_page() {
 
 	<hr>
 
+	<!-- Cloudflare Turnstile -->
+	<h2><?php esc_html_e( 'Cloudflare Turnstile', 'hxfe-code-first-forms' ); ?></h2>
+	<p class="description">
+		<?php esc_html_e( 'reCAPTCHAの代替として使えるスパム対策です。Cloudflare Dashboardで取得したキーを入力してください。', 'hxfe-code-first-forms' ); ?>
+		<a href="https://developers.cloudflare.com/turnstile/get-started/" target="_blank" rel="noopener noreferrer">
+			<?php esc_html_e( 'Turnstileの設定方法 ↗', 'hxfe-code-first-forms' ); ?>
+		</a>
+	</p>
+	<form method="post" action="options.php">
+		<?php
+		$ts = get_option( 'hxfe_turnstile', [] );
+		settings_fields( 'hxfe_turnstile_group' );
+		?>
+		<table class="form-table">
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Site Key', 'hxfe-code-first-forms' ); ?></th>
+				<td><input type="text" name="hxfe_turnstile[site_key]"
+					value="<?php echo esc_attr( $ts['site_key'] ?? '' ); ?>"
+					class="regular-text">
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Secret Key', 'hxfe-code-first-forms' ); ?></th>
+				<td><input type="password" name="hxfe_turnstile[secret_key]"
+					value="<?php echo esc_attr( $ts['secret_key'] ?? '' ); ?>"
+					class="regular-text">
+				</td>
+			</tr>
+		</table>
+		<p class="description">
+			<?php esc_html_e( 'スキーマへの追加方法:', 'hxfe-code-first-forms' ); ?><br>
+			<code>[ 'key' =&gt; 'turnstile', 'type' =&gt; 'turnstile' ]</code>
+			&nbsp;/&nbsp;
+			<code>[ 'key' =&gt; 'turnstile', 'type' =&gt; 'turnstile', 'mode' =&gt; 'invisible' ]</code>
+		</p>
+
+		<?php submit_button( __( 'Save Turnstile Settings', 'hxfe-code-first-forms' ) ); ?>
+	</form>
+
+	<hr>
+
 	<!-- プライバシーポリシー -->
 	<h2><?php esc_html_e( 'Privacy Policy', 'hxfe-code-first-forms' ); ?></h2>
 	<p class="description">

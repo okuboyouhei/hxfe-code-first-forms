@@ -1,6 +1,6 @@
 # HXFE — Code-First Forms — AI Agent Reference
 
-**Current version: 1.4.3**
+**Current version: 1.4.4**
 
 ## What this file is
 
@@ -69,9 +69,12 @@ add_filter( 'hxfe_schemas', function( $schemas ) {
 | `file` | File upload → attached to admin email | `accept`, `max_size_mb`, `mime_types` |
 | `honeypot` | Invisible spam trap | no extra keys |
 | `recaptcha` | Google reCAPTCHA | `version` ('v2'/'v3'), `threshold` |
+| `turnstile` | Cloudflare Turnstile | `mode` ('managed'/'invisible') |
 | `privacy` | Privacy policy checkbox | `policy_url`, `policy_label` |
 
 **reCAPTCHA note (v1.3.8+):** A `recaptcha` field requires a secret key (set in Settings → HXFE, or via the field's `secret_key`). If the secret key is missing, submissions **fail closed** in production (WP_DEBUG off) — they are blocked rather than passed through unverified. With WP_DEBUG on, validation is skipped for local development. The schema linter warns when a `recaptcha` field has no secret key configured.
+
+**Turnstile note (v1.4.4+):** A `turnstile` field is Cloudflare's privacy-friendly CAPTCHA alternative. Set Site Key / Secret Key in Settings → HXFE, or per-field via `site_key` / `secret_key`. Two modes: `managed` (default, shows an auto-verifying widget) and `invisible` (`data-appearance="interaction-only"` — UI appears only when a challenge is needed). Like reCAPTCHA it **fails closed** in production when the secret key is missing, and skips verification under WP_DEBUG. **CAPTCHA verification timing (v1.4.4):** both reCAPTCHA and Turnstile are verified in the **validate** handler (input → confirm step), not the submit handler. This is because the confirm screen does not carry the CAPTCHA widget/token forward; verifying at validate time ensures the token (present on the input screen) is checked correctly whether or not a confirm screen is used.
 
 ---
 

@@ -64,6 +64,7 @@ function hxfe_shortcode_handler( $atts ) {
 
 	hxfe_enqueue_assets( $schema );
 	hxfe_enqueue_recaptcha_scripts( $schema );
+	hxfe_enqueue_turnstile_scripts( $schema );
 
 	// chatbotモード
 	if ( hxfe_is_chatbot_mode( $schema ) ) {

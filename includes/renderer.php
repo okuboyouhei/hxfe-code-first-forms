@@ -118,7 +118,7 @@ function hxfe_render_confirm( array $schema, array $values ) {
 			<input type="hidden" name="hxfe_file_names" value="<?php echo $_hxfe_file_names_json; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_attr applied above ?>">
 			<?php
 			// 非表示フィールドを除外して表示（条件分岐で hidden のフィールドは出さない）
-			$skip_types = [ 'honeypot', 'recaptcha' ];
+			$skip_types = [ 'honeypot', 'recaptcha', 'turnstile' ];
 			foreach ( $schema['fields'] as $field ) :
 				$type  = $field['type'] ?? 'text';
 				if ( in_array( $type, $skip_types, true ) ) { continue; }
@@ -330,6 +330,11 @@ function hxfe_render_field( array $field, array $errors, array $values ) {
 	if ( 'recaptcha' === $type ) {
 		$error = $errors[ $field['key'] ] ?? '';
 		return hxfe_render_recaptcha_field( $field, $error );
+	}
+
+	if ( 'turnstile' === $type ) {
+		$error = $errors[ $field['key'] ] ?? '';
+		return hxfe_render_turnstile_field( $field, $error );
 	}
 
 	// プライバシーポリシー同意フィールド

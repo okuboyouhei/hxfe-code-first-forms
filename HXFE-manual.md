@@ -1,6 +1,6 @@
 # HXFE — Code-First Forms マニュアル
 
-**バージョン 1.4.1** | 最終更新: 2026-06-14
+**バージョン 1.4.4** | 最終更新: 2026-06-27
 
 ---
 
@@ -23,6 +23,7 @@
 - 条件分岐（show_if / required_if）
 - ステップのスキップ
 - reCAPTCHA（スパム対策）
+- Cloudflare Turnstile（スパム対策）
 - プライバシーポリシー同意
 
 ### カスタマイズ編
@@ -429,6 +430,12 @@ GUIプラグインでは「手動で選択肢を入力・更新」する必要�
 
 ---
 
+### turnstile — Cloudflare Turnstile
+
+→ 詳細は [Cloudflare Turnstile セクション](#cloudflare-turnstileスパム対策v144) を参照
+
+---
+
 ### privacy — プライバシーポリシー同意
 
 → 詳細は [プライバシーポリシー同意 セクション](#プライバシー) を参照
@@ -817,6 +824,51 @@ $schemas['survey'] = [
 ```php
 [ 'key' => 'captcha', 'type' => 'recaptcha', 'version' => 'v2' ]
 ```
+
+
+---
+
+## Cloudflare Turnstile（スパム対策・v1.4.4〜）
+
+reCAPTCHAの代替として使える、プライバシー配慮型のCAPTCHAです。Cookietrackingを行わず、多くの場合ユーザー操作なしで検証が完了します。
+
+### 事前準備
+
+1. [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/get-started/) でサイトを登録し、Site Key / Secret Key を取得
+2. WordPress管理画面 → **設定 → HXFE → Cloudflare Turnstile** でキーを入力
+
+> **シークレットキー未設定時の挙動**
+> reCAPTCHAと同じく、シークレットキー未設定の場合は本番環境（WP_DEBUG無効）で送信が**ブロック**されます（fail-closed）。開発環境（WP_DEBUG有効）では検証をスキップします。
+
+### managed モード（デフォルト）
+
+自動検証ウィジェットを表示します。多くの場合ユーザーはクリック不要で、Cloudflareが自動的に検証します。
+
+```php
+[ 'key' => 'turnstile', 'type' => 'turnstile' ]
+```
+
+### invisible モード
+
+`data-appearance="interaction-only"` を使い、ボット判定が必要なときだけUIを表示します。通常は何も表示されません。
+
+```php
+[ 'key' => 'turnstile', 'type' => 'turnstile', 'mode' => 'invisible' ]
+```
+
+### キーをスキーマに直接書く場合
+
+```php
+[
+    'key'        => 'turnstile',
+    'type'       => 'turnstile',
+    'site_key'   => '0x4AAA...',
+    'secret_key' => '0x4AAA...',
+]
+```
+
+> **検証のタイミング（v1.4.4）**
+> reCAPTCHA・Turnstileとも、確認画面の有無にかかわらず正しく動くよう、検証は「入力画面 → 確認画面」の手前（validateステップ）で行われます。確認画面にはCAPTCHAウィジェットが引き継がれないため、ウィジェットが存在する入力画面の段階でトークンを検証する設計です。
 
 
 ---
@@ -1211,6 +1263,38 @@ $schemas['id'] = [
 - **更新**: htmxを1.9.12から2.0.10にアップデート
 - **変更**: htmxスクリプトハンドル名を `hxfe-htmx` → `hx-htmx` に変更（HXシリーズ共通ハンドル・他プラグインとの互換性向上）
 - **改善**: `wp_script_is()` による重複読み込み防止ロジックを追加
+
+---
+
+## v1.4.4
+
+- **追加**: Cloudflare Turnstile フィールド（`type: 'turnstile'`）— reCAPTCHAの代替となるプライバシー配慮型CAPTCHA。managed（自動検証ウィジェット）と invisible（必要時のみ表示）の2モード
+- **追加**: Turnstile の Site Key / Secret Key 設定（設定 → HXFE）
+- **変更**: CAPTCHA検証（reCAPTCHA・Turnstile）を submit ステップから validate ステップに移動。確認画面を経由するフローでもトークンが正しく検証されるよう修正
+
+---
+
+## v1.4.3
+
+- **修正**: SMTPテストメールの二重エンコード
+- **修正**: `$_GET['test_msg']` のサニタイズ
+- **ドキュメント**: プラグインの短い説明を短縮
+
+---
+
+## v1.4.2
+
+- **追加**: SECURITY.md — セキュリティポリシー・脆弱性報告・開示タイムライン
+- **追加**: MAINTENANCE.md — アーキテクチャ概要・htmx更新手順・フォークガイド
+- **ドキュメント**: ai-reference.md にAIエージェント向けの設計思想・保守性セクションを追加
+
+---
+
+## v1.4.1
+
+- **更新**: htmx 2.0.10 に更新
+- **変更**: スクリプトハンドル名を `hx-htmx` に統一
+- **改善**: 重複読み込み防止ロジックを追加
 
 ---
 

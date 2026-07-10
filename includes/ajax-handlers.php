@@ -198,6 +198,17 @@ function hxfe_handle_validate() {
 		$imm_file_paths   = json_decode( $immediate_values['__file_paths'] ?? '{}', true ) ?: [];
 		unset( $immediate_values['__file_paths'], $immediate_values['__file_names'] );
 		hxfe_send_emails( $schema, $immediate_values, $imm_file_paths );
+
+		/**
+		 * フォーム送信完了後のフック。
+		 *
+		 * @since 1.4.5
+		 * @param string $form_id フォームID
+		 * @param array  $values  送信された値（サニタイズ済み）
+		 * @param array  $schema  フォームスキーマ
+		 */
+		do_action( 'hxfe_after_submit', $schema['id'] ?? '', $immediate_values, $schema );
+
 		hxfe_cleanup_uploaded_files( array_values( $imm_file_paths ) );
 		echo hxfe_render_complete( $schema, $immediate_values ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		wp_die();
@@ -264,6 +275,9 @@ function hxfe_handle_submit() {
 	unset( $submit_values['__file_paths'], $submit_values['__file_names'] );
 
 	hxfe_send_emails( $schema, $submit_values, $file_paths );
+
+	/** This action is documented in includes/ajax-handlers.php */
+	do_action( 'hxfe_after_submit', $schema['id'] ?? '', $submit_values, $schema );
 
 	// メール送信後にアップロードファイルを削除
 	hxfe_cleanup_uploaded_files( array_values( $file_paths ) );
@@ -360,6 +374,8 @@ function hxfe_handle_step_next() {
 		// confirm: false の場合は確認画面をスキップして即送信
 		if ( isset( $schema['confirm'] ) && false === $schema['confirm'] ) {
 			hxfe_send_emails( $schema, $values );
+			/** This action is documented in includes/ajax-handlers.php */
+			do_action( 'hxfe_after_submit', $schema['id'] ?? '', $values, $schema );
 			echo hxfe_render_complete( $schema, $values ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			wp_die();
 		}
@@ -415,6 +431,8 @@ function hxfe_handle_step_submit() {
 	}
 
 	hxfe_send_emails( $schema, $values );
+	/** This action is documented in includes/ajax-handlers.php */
+	do_action( 'hxfe_after_submit', $schema['id'] ?? '', $values, $schema );
 	echo hxfe_render_complete( $schema, $values ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	wp_die();
 }

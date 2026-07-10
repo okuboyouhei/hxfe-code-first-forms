@@ -4,7 +4,7 @@ Tags: contact form, form builder, htmx, chatbot, ajax
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.4.4
+Stable tag: 1.4.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -224,6 +224,9 @@ reCAPTCHA is **disabled by default**. It is only active when a site administrato
 * Google Privacy Policy: https://policies.google.com/privacy
 
 == Changelog ==
+
+= 1.4.5 =
+* Added: `hxfe_after_submit` action hook — fires after successful form submission with `$form_id`, `$values`, `$schema`. Enables third-party plugins (e.g. HXMD) to capture submissions
 
 = 1.4.4 =
 * Added: Cloudflare Turnstile field type (`type: 'turnstile'`) — privacy-friendly spam protection as an alternative to reCAPTCHA

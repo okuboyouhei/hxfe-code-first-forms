@@ -4,7 +4,7 @@ Tags: contact form, form builder, htmx, chatbot, ajax
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.4.5
+Stable tag: 1.4.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -224,6 +224,9 @@ reCAPTCHA is **disabled by default**. It is only active when a site administrato
 * Google Privacy Policy: https://policies.google.com/privacy
 
 == Changelog ==
+
+= 1.4.6 =
+* Security: Webhook requests now use `reject_unsafe_urls` to block requests to internal IPs and unsafe ports (SSRF hardening, found in monthly AI-driven security review)
 
 = 1.4.5 =
 * Added: `hxfe_after_submit` action hook — fires after successful form submission with `$form_id`, `$values`, `$schema`. Enables third-party plugins (e.g. HXMD) to capture submissions

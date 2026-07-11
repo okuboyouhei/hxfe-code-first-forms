@@ -93,6 +93,7 @@ function hxfe_send_single_webhook( array $webhook, array $values, array $schema 
 		'headers' => $headers,
 		'body'    => $body,
 		'timeout' => 10, // 10秒タイムアウト
+		'reject_unsafe_urls' => true, // SSRF対策: 内部IP・不正ポートへのリクエストを拒否（v1.4.6）
 	];
 
 	if ( 'GET' === $method ) {

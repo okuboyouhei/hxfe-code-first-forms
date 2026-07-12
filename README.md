@@ -2,7 +2,7 @@
 
 **Define WordPress forms as PHP arrays. AI-ready, Git-managed, zero database.**
 
-[![WordPress Plugin Version](https://img.shields.io/badge/version-1.4.3-blue)](https://wordpress.org/plugins/hxfe-code-first-forms/) [![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-blue)](https://wordpress.org) [![PHP](https://img.shields.io/badge/PHP-7.4%2B-purple)](https://php.net) [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green)](https://www.gnu.org/licenses/gpl-2.0.html)
+[![WordPress Plugin Version](https://img.shields.io/badge/version-1.4.6-blue)](https://wordpress.org/plugins/hxfe-code-first-forms/) [![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-blue)](https://wordpress.org) [![PHP](https://img.shields.io/badge/PHP-7.4%2B-purple)](https://php.net) [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green)](https://www.gnu.org/licenses/gpl-2.0.html)
 
 [WordPress.org](https://wordpress.org/plugins/hxfe-code-first-forms/) · [Documentation](https://wordpress.org/plugins/hxfe-code-first-forms/) · [Report Issue](https://github.com/okuboyouhei/hxfe-code-first-forms/issues)
 
@@ -84,11 +84,13 @@ $schemas['contact']['steps'] = [
 
 ## Key features
 
-- **15 field types** — text, email, tel, url, textarea, select, radio, checkbox, checkbox_group, number, date, file, honeypot, reCAPTCHA, privacy
+- **16 field types** — text, email, tel, url, textarea, select, radio, checkbox, checkbox_group, number, date, file, honeypot, reCAPTCHA, Turnstile, privacy
 - **Conditional logic** — `show_if`, `required_if`, `skip_if`
 - **Dynamic routing** — `to_rules`, `subject_rules`, `complete_redirect_rules` based on submitted values
 - **Diagnosis mode** — use `complete_html_rules` without `to` to show results without sending email
-- **Webhook support** — Zapier, Make, Slack, or any HTTP endpoint
+- **Spam protection, three ways** — honeypot, reCAPTCHA v2/v3, and Cloudflare Turnstile (v1.4.4+)
+- **Webhook support** — Zapier, Make, Slack, or any HTTP endpoint (SSRF-hardened with `reject_unsafe_urls`)
+- **`hxfe_after_submit` action hook** — lets other plugins capture submissions; powers the [HXMD](https://wordpress.org/plugins/hxmd-markdown-log-manager/) auto-logging integration (v1.4.5+)
 - **Built-in SMTP** — Gmail, SendGrid, Mailgun, or custom SMTP
 - **File upload** — attached to email, auto-deleted after send
 - **IP restriction & password protection** — per-form access control
@@ -138,9 +140,9 @@ add_filter( 'hxfe_schemas', function( $schemas ) {
 
 ---
 
-### Field types (15 total)
+### Field types (16 total)
 
-`text` `email` `tel` `url` `number` `date` `textarea` `select` `radio` `checkbox` `checkbox_group` `file` `honeypot` `recaptcha` `privacy`
+`text` `email` `tel` `url` `number` `date` `textarea` `select` `radio` `checkbox` `checkbox_group` `file` `honeypot` `recaptcha` `turnstile` `privacy`
 
 ---
 
@@ -298,9 +300,11 @@ $schemas['quiz'] = [
 - All input sanitized, all output escaped
 - `hash_equals()` for password comparison (timing-attack safe)
 - `REMOTE_ADDR`-only IP matching (proxy header spoofing prevented)
-- reCAPTCHA fields fail closed in production if misconfigured
+- reCAPTCHA / Turnstile fields fail closed in production if misconfigured
 - Uploaded files deleted immediately after email delivery
+- Webhook requests reject internal IPs and unsafe ports (`reject_unsafe_urls`, v1.4.6)
 - Passed WordPress.org manual security review
+- **Monthly AI-driven security review** — see [SECURITY-CHECKLIST.md](https://github.com/okuboyouhei/hxfe-code-first-forms/blob/main/SECURITY-CHECKLIST.md) for the recurring audit process and findings history
 
 See [SECURITY.md](https://github.com/okuboyouhei/hxfe-code-first-forms/blob/main/SECURITY.md) for the full policy.
 
